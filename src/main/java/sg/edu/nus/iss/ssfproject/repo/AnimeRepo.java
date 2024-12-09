@@ -1,6 +1,8 @@
 package sg.edu.nus.iss.ssfproject.repo;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,24 @@ public class AnimeRepo {
     @Autowired
     @Qualifier(ConstantVar.template01)
     private RedisTemplate<String, String> template;
+
+    public List<String> animeGenres() {
+        List<String> animeGenres = new ArrayList<>(Arrays.asList("Slice of Life",
+                                                                        "Comedy",
+                                                                        "Sports",
+                                                                        "Romance",
+                                                                        "Shoujo",
+                                                                        "Fantasy",
+                                                                        "Psychological",
+                                                                        "Action",
+                                                                        "Seinen",
+                                                                        "Horror",
+                                                                        "Shounen",
+                                                                        "Adventure"
+                                                                        ));
+
+        return animeGenres;
+    }
 
     // Add or update a single key-value pair in a hash (CREATE)
     public void setHash(String redisKey, String mapKey, String value) {
@@ -119,4 +139,9 @@ public class AnimeRepo {
         template.opsForHash().increment(redisKey, mapKey, delta);
     }
 
+    public String getValue(String redisKey) { 
+        return template.opsForValue().get(redisKey);  
+        
+
+    }
 }
