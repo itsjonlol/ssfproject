@@ -29,6 +29,17 @@ public class Anime {
 
     
 
+    
+
+    public Anime(Integer mal_id, String large_image_url, String title) {
+        this.mal_id = mal_id;
+        this.large_image_url = large_image_url;
+        this.title = title;
+    }
+
+
+
+
 
     public Anime(Integer mal_id, String large_image_url, String title, String title_japanese, String type,
             Integer episodes, String status, String duration, Double score, Integer rank, String synopsis,

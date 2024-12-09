@@ -21,8 +21,10 @@ public class SsfprojectApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		//instantiate once
-		
-		animeService.getAnimeGenre();
+		if (!animeService.hasRedisKey(ConstantVar.genresRedisKey)) {
+			animeService.getAnimeGenre();
+		}
+		//maybe can load all the categories into redis first.
 		
 		
 	}

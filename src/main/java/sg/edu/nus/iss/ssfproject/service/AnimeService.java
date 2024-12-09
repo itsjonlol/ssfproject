@@ -12,14 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
-import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import jakarta.json.JsonReader;
-import jakarta.json.JsonValue;
 import sg.edu.nus.iss.ssfproject.constant.ConstantVar;
 import sg.edu.nus.iss.ssfproject.constant.Url;
 import sg.edu.nus.iss.ssfproject.models.Anime;
@@ -78,15 +75,21 @@ public class AnimeService {
     }
 
     public List<Anime> getAnimeListByGenre(String genre) {
-       
-        String genreId = String.valueOf(animeGenreMap.get(genre));
-        String cacheKey = "anime: " + ConstantVar.animeListByGenreRedisKey;
+        List<Anime> animeListByGenre = new ArrayList<>();
+        // String genreId = String.valueOf(animeGenreMap.get(genre));
+        String genreId = animeRepo.getValueFromHash(ConstantVar.genresRedisKey, genre);
         
         String animeByGenreIdUrl = String.format(Url.animesByGenreId,genreId);
-        List<Anime> animeListByGenre = this.fetchAnimeApi(animeByGenreIdUrl);
+        //cache hit to reduce load times
+        if (animeRepo.hashExists(genre)) {
+            animeListByGenre = this.getCachedAnimesByGenre(genre);
+            return animeListByGenre;
+        }
+        //cache miss-> store inside redis
+        animeListByGenre = this.fetchAnimeApi(animeByGenreIdUrl);
+        
         for (Anime anime : animeListByGenre) {
             this.saveAnimeByGenre(anime,genre);
-            
         }
         
         return animeListByGenre;
@@ -118,11 +121,40 @@ builder.add("large_image_url", anime.getLarge_image_url() != null ? anime.getLar
 builder.add("title", anime.getTitle() != null ? anime.getTitle() : null);
 
 
+// Handle lists
+// JsonArrayBuilder producerArrayBuilder = Json.createArrayBuilder();
+// if (anime.getProducers() != null && !anime.getProducers().isEmpty()) {
+//     for (String producer : anime.getProducers()) {
+//         producerArrayBuilder.add(Json.createObjectBuilder().add("name", producer));
+//     }
+// } else {
+//     producerArrayBuilder.add(JsonValue.NULL);
+// }
+// builder.add("producers", producerArrayBuilder.build());
 
+// JsonArrayBuilder studioArrayBuilder = Json.createArrayBuilder();
+// if (anime.getStudios() != null && !anime.getStudios().isEmpty()) {
+//     for (String studio : anime.getStudios()) {
+//         studioArrayBuilder.add(Json.createObjectBuilder().add("name", studio));
+//     }
+// } else {
+//     studioArrayBuilder.add(JsonValue.NULL);
+// }
+// builder.add("studios", studioArrayBuilder.build());
+
+// JsonArrayBuilder genreArrayBuilder = Json.createArrayBuilder();
+// if (anime.getGenres() != null && !anime.getGenres().isEmpty()) {
+//     for (String genre : anime.getGenres()) {
+//         genreArrayBuilder.add(Json.createObjectBuilder().add("name", genre));
+//     }
+// } else {
+//     genreArrayBuilder.add(JsonValue.NULL);
+// }
+// builder.add("genres", genreArrayBuilder.build());
 
 // Finally build the JsonObject
 JsonObject animeJsonObject = builder.build();
-animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonObject.toString());
+animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonObject.toString()); // doesnt matter put here or savelist func
 
         // JsonArrayBuilder producerBuilder = Json.createArrayBuilder();
         // JsonArrayBuilder studioBuilder = Json.createArrayBuilder();
@@ -195,6 +227,33 @@ animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonObject.t
         return animeListByQuery;
 
     }
+
+    public List<Anime> getCachedAnimesByGenre(String genre) {
+        List<Object> objectList = animeRepo.getAllValuesFromHash(genre);
+        List<Anime> animes = new ArrayList<>();
+
+        for (Object data : objectList) {
+            String dataJsonString = (String) data;
+            InputStream is = new ByteArrayInputStream(dataJsonString.getBytes());
+            JsonReader reader = Json.createReader(is);
+            JsonObject dataJson = reader.readObject();
+            Anime anime = new Anime();
+
+            Integer mal_id = dataJson.getInt("mal_id");
+            String large_image_url = dataJson.getString("large_image_url");
+            String title = dataJson.getString("title");
+
+            anime.setMal_id(mal_id);
+            anime.setLarge_image_url(large_image_url);
+            anime.setTitle(title);
+            animes.add(anime);
+            
+        }
+        return animes;
+    
+    }
+        
+    
 
     public List<Anime> fetchAnimeApi(String url) {
         List<Anime> animeList = new ArrayList<>();

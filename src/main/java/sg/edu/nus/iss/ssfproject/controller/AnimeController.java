@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import jakarta.servlet.http.HttpSession;
 import sg.edu.nus.iss.ssfproject.models.Anime;
 import sg.edu.nus.iss.ssfproject.service.AnimeService;
 
@@ -30,10 +29,13 @@ public class AnimeController {
     }
     
     @GetMapping("/topanimebygenre")
-    public String topAnimeByGenre(Model model) {
+    public String topAnimeByGenre(@RequestParam(required=false,name = "genre",defaultValue="Comedy") String genre, Model model) {
         List<String> animeGenres = animeService.getAnimeGenres();
         model.addAttribute("animegenres",animeGenres);
-        List<Anime> animeListByGenre = animeService.getAnimeListByGenre("Slice of Life");
+        // if (genre ==null) {
+        //     genre = "Slice of Life"; // default value
+        // }
+        List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);
         model.addAttribute("animelist",animeListByGenre);
         return "view0";
     }
