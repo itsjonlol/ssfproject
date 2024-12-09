@@ -12,6 +12,12 @@ public class AnimeUtil {
 
         Anime anime = new Anime();
         //retrive the relevant data from the call
+
+        // if (jObject.isNull("episodes")) {
+//     episodes = null;
+// } else {
+//     episodes = jObject.getInt("episodes");
+// }
         Integer mal_id = jObject.getInt("mal_id");
         String large_image_url = jObject.getJsonObject("images").getJsonObject("webp").getString("large_image_url");
         String title = jObject.getString("title");

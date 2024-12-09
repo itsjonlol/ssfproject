@@ -15,8 +15,11 @@ import org.springframework.web.client.RestTemplate;
 
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
+import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
 import jakarta.json.JsonReader;
+import jakarta.json.JsonValue;
 import sg.edu.nus.iss.ssfproject.constant.ConstantVar;
 import sg.edu.nus.iss.ssfproject.constant.Url;
 import sg.edu.nus.iss.ssfproject.models.Anime;
@@ -81,10 +84,110 @@ public class AnimeService {
         
         String animeByGenreIdUrl = String.format(Url.animesByGenreId,genreId);
         List<Anime> animeListByGenre = this.fetchAnimeApi(animeByGenreIdUrl);
-
-    
+        for (Anime anime : animeListByGenre) {
+            this.saveAnimeByGenre(anime,genre);
+            
+        }
+        
         return animeListByGenre;
     }
+
+    // private Integer mal_id;
+    // //which image
+    // private String large_image_url;
+
+    // // youtube trailer omit first
+    // private String title;
+    // private String title_japanese;
+    // private String type;
+    // private Integer episodes;
+    // private String status;
+    // private String duration;
+    // private Double score;
+    // private Integer rank;
+    // private String synopsis;
+    // private Integer year;
+    // private List<String> producers;
+    // private List<String> studios;
+    // private List<String> genres;
+    public void saveAnimeByGenre(Anime anime,String category) {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+
+builder.add("mal_id", anime.getMal_id() != null ? anime.getMal_id() : null);
+builder.add("large_image_url", anime.getLarge_image_url() != null ? anime.getLarge_image_url() : null);
+builder.add("title", anime.getTitle() != null ? anime.getTitle() : null);
+
+
+
+
+// Finally build the JsonObject
+JsonObject animeJsonObject = builder.build();
+animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonObject.toString());
+
+        // JsonArrayBuilder producerBuilder = Json.createArrayBuilder();
+        // JsonArrayBuilder studioBuilder = Json.createArrayBuilder();
+        // JsonArrayBuilder genreBuilder = Json.createArrayBuilder();
+        
+        // for (String producer : anime.getProducers()) {
+        //     JsonObject producerJsonObject = Json.createObjectBuilder()
+        //                                         .add("name",producer)
+        //                                         .build();
+        //     producerBuilder.add(producerJsonObject);
+        // }
+        // for (String studio : anime.getStudios()) {
+        //     JsonObject studioJsonObject = Json.createObjectBuilder()
+        //                                         .add("name",studio)
+        //                                         .build();
+        //     studioBuilder.add(studioJsonObject);
+        // }
+        // for (String genre : anime.getGenres()) {
+        //     JsonObject genreJsonObject = Json.createObjectBuilder()
+        //                                         .add("name",genre)
+        //                                         .build();
+        //     genreBuilder.add(genreJsonObject);
+        // }
+        
+        // JsonObject animeJsonObject = Json.createObjectBuilder()
+        //                                  .add("mal_id",anime.getMal_id())
+        //                                  .add("large_image_url",anime.getLarge_image_url())
+        //                                  .add("title",anime.getTitle())
+        //                                  .add("title_japanese",anime.getTitle_japanese())
+        //                                  .add("type",anime.getType())
+        //                                  .add("episodes",anime.getEpisodes())
+        //                                  .add("status",anime.getStatus())
+        //                                  .add("duration",anime.getDuration())
+        //                                  .add("score",anime.getScore())
+        //                                  .add("rank",anime.getRank())
+        //                                  .add("synopsis",anime.getSynopsis())
+        //                                  .add("year",anime.getYear())
+        //                                  .add("producers",producerBuilder.build())
+        //                                  .add("studios",studioBuilder.build())
+        //                                  .add("genres",genreBuilder.build())
+        //                                  .build();
+        // animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonObject.toString());
+
+    }
+
+    // public void saveArticles2(List<News> savedArticles) {
+        
+    //     for (News news : savedArticles) {
+    //         JsonObject newsJsonObject = Json.createObjectBuilder()
+    //                                         .add("id",news.getId())
+    //                                         .add("published",news.getPublished())
+    //                                         .add("title",news.getTitle())
+    //                                         .add("url",news.getUrl())
+    //                                         .add("imageurl",news.getImageUrl())
+    //                                         .add("body",news.getBody())
+    //                                         .add("tags",news.getTags())
+    //                                         .add("categories",news.getCategories())
+    //                                         .build();
+    //         //if update, it will just autoupdate
+    //         newsRepo.setHash(ConstantVar.redisKey, news.getId(), newsJsonObject.toString());                                 
+
+    //     }
+        
+        
+    // }
 
     public List<Anime> getAnimeListByQuery(String query) {
         String animeByQueryUrl = String.format(Url.animesByQuery,query);
