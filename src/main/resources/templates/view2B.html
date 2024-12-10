@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #222;
+            color: #fff;
+        }
+
+        .anime-details-container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .anime-image img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .anime-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .anime-metadata {
+            margin-bottom: 20px;
+        }
+
+        .anime-genres span {
+            background-color: #444;
+            color: #fff;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin-right: 5px;
+        }
+
+        .anime-synopsis {
+            line-height: 1.6;
+        }
+
+        .info-section {
+            margin-bottom: 20px;
+        }
+
+        .info-section h5 {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .info-section ul {
+            padding-left: 20px;
+        }
+
+        .info-section ul li {
+            list-style-type: disc;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Anime Finder</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/search">Search</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="anime-details-container">
+        <div class="row">
+            <div class="col-md-4 anime-image">
+                <img th:src="@{${anime.large_image_url}}" alt="Anime Cover">
+            </div>
+            <div class="col-md-8">
+                <div class="anime-title" th:text="${anime.title}">Anime Title</div>
+                <div class="anime-metadata">
+                    <p th:text="'Japanese Title: ' + (${anime.title_japanese} ?: 'Unknown')">Japanese Title</p>
+                    <p th:text="'Episodes: ' + (${anime.episodes} ?: 'Unknown')">Episodes</p>
+                    <p th:text="'Status: ' + (${anime.status} ?: 'Unknown')">Status</p>
+                    <p th:text="'Duration: ' + (${anime.duration} ?: 'Unknown')">Duration</p>
+                    <p th:text="'Rank: #' + (${anime.rank} ?: 'Unknown')">Rank</p>
+                    <p th:text="'Score: ' + (${anime.score} ?: 'Unknown')">Score</p>
+                    <p th:text="'Aired: ' + (${anime.year} ?: 'Unknown')">Aired</p>
+                </div>
+                <div class="anime-genres">
+                    <span th:each="genre : ${anime.genres}" th:text="${genre} ?: 'Unknown'">Genre</span>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4" />
+
+        <div class="anime-synopsis">
+            <h3>Synopsis</h3>
+            <p th:text="${anime.synopsis} ?: 'No synopsis available.'">This is the anime synopsis. It will be replaced with the actual content.</p>
+        </div>
+
+        <hr class="my-4" />
+
+        <div class="info-section">
+            <h5>Studios</h5>
+            <ul>
+                <li th:each="studio : ${anime.studios}" th:text="${studio} ?: 'Unknown'">Studio Name</li>
+                <li th:if="${anime.studios == null || anime.studios.isEmpty()}">Unknown</li>
+            </ul>
+        </div>
+
+        <div class="info-section">
+            <h5>Producers</h5>
+            <ul>
+                <li th:each="producer : ${anime.producers}" th:text="${producer} ?: 'Unknown'">Producer Name</li>
+                <li th:if="${anime.producers == null || anime.producers.isEmpty()}">Unknown</li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>

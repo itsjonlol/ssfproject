@@ -23,7 +23,24 @@
             </thead>
             <tbody>
                 
-    
+                <!-- private Integer mal_id;
+                //which image
+                private String large_image_url;
+            
+                // youtube trailer omit first
+                private String title;
+                private String title_japanese;
+                private String type;
+                private Integer episodes;
+                private String status;
+                private String duration;
+                private Double score;
+                private Integer rank;
+                private String synopsis;
+                private Integer year;
+                private List<String> producers;
+                private List<String> studios;
+                private List<String> genres; -->
     
                 <tr>
                     <td th:text="${anime.mal_id}"></td>
@@ -31,9 +48,28 @@
                     <td>
                          <img th:src="@{${anime.large_image_url}}">
                     </td>
+                    <td th:text="${anime.title_japanese}"></td>
+                    <td th:text="${anime.type}"></td>
+                    <td th:text="${anime.episodes}"></td>
+                    <td th:text="${anime.status}"></td>
+                    <td th:text="${anime.duration}"></td>
+                    <td th:text="${anime.score}"></td>
+                    <td th:text="${anime.rank}"></td>
+                    <td th:text="${anime.synopsis}"></td>
+                    <td th:text="${anime.year}"></td>
                     <td>
                         <div th:each="producer : ${anime.producers}">
                             <p th:text="${producer}"></p>
+                        </div>
+                    </td>
+                    <td>
+                        <div th:each="studio : ${anime.studios}">
+                            <p th:text="${studio}"></p>
+                        </div>
+                    </td>
+                    <td>
+                        <div th:each="genre : ${anime.genres}">
+                            <p th:text="${genre}"></p>
                         </div>
                     </td>
                 </tr>

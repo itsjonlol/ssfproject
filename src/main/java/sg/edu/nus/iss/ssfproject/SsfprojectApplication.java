@@ -1,5 +1,7 @@
 package sg.edu.nus.iss.ssfproject;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -23,9 +25,17 @@ public class SsfprojectApplication implements CommandLineRunner{
 		//instantiate once
 		if (!animeService.hasRedisKey(ConstantVar.genresRedisKey)) {
 			animeService.getAnimeGenre();
+			List<String> animeGenresList = animeService.getAnimeGenres();
+			//so can pre-load the first category
+			animeService.getAnimeListByGenre(animeGenresList.get(0));
+			// for (String genre : animeGenresList) {
+			// 	animeService.getAnimeListByGenre(genre);
+			// }
 		}
 		//maybe can load all the categories into redis first.
 		
+		
+
 		
 	}
 

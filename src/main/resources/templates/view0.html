@@ -3,84 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Anime List</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        .anime-card {
+            background-color: #343a40;
+            color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .anime-card:hover {
+            transform: scale(1.05);
+        }
+
+        .anime-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .anime-title {
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .filter-container {
+            margin-bottom: 20px;
+        }
+
+        .filter-label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .filter-button {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .filter-button:hover {
+            background-color: #0056b3;
+        }
+
+        select {
+            background-color: #343a40;
+            color: #ffffff;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 5px;
+        }
+    </style>
 </head>
 <body>
-    <!-- <button class = "btn btn-primary">
-        <a th:href="@{/persons/create}">Create</a>
-    </button> -->
-    <div class = "container">
-        <div class = "row">
-            <h1>List of anime</h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Anime Finder</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/search">Search</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class = "row">
-        <form method="POST" th:action="@{/topanimebygenre/filter}">
-            <label>Filter by category</label>
-            <select name = "genre" >
-                <option th:each="genre : ${animegenres}" th:text="${genre}" ></option>
-            </select>
-            <button type = "submit">Filter</button>
+    </nav>
     
-        </form>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Anime List</h1>
+
+        <!-- Filter Section -->
+        <div class="row filter-container">
+            <div class="col-md-8 offset-md-2 d-flex justify-content-center">
+                <form method="POST" th:action="@{/filter}" class="d-flex">
+                    <label for="genre" class="filter-label">Filter by Genre:</label>
+                    <select name="genre" id="genre" class="me-2">
+                        <option th:each="genre : ${animegenres}" th:value="${genre}" th:text="${genre}"></option>
+                    </select>
+                    <button type="submit" class="filter-button">Filter</button>
+                </form>
+            </div>
         </div>
-    <table class = "table table-striped table-bordered">
-        <thead class="table-dark">
-            <tr>
-                <th>Id</th>
-                <th>Full name</th>
-                <th>Email</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- <tr th:if="${persons.size() == 0 }">
-                <td colspan="9" class = "text-center">No record found</td>
-            </tr> -->
 
-            <!-- private Integer mal_id;
-    //which image
-    private String large_image_url;
+        <!-- Anime Cards Section -->
+        <div class="row g-4">
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2" th:each="anime : ${animelist}">
+                <div class="anime-card">
+                    <a th:href="@{'/' + ${anime.mal_id}}" >
+                    <img th:src="@{${anime.large_image_url}}" alt="Anime Image" class="anime-image">
+                    </a>
+                    <div class="anime-title" th:text="${anime.title}" >
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    // youtube trailer omit first
-    private String title;
-    private String title_japanese;
-    private String type;
-    private Integer episodes;
-    private String status;
-    private String duration;
-    private Double score;
-    private Integer rank;
-    private String synopsis;
-    private Integer year;
-    private List<String> producers;
-    private List<String> studios;
-    private List<String> genres; -->
-
-            <tr th:each="anime : ${animelist}">
-                <td th:text="${anime.mal_id}"></td>
-                <td>
-                    <a th:href="@{'/' + ${anime.mal_id}}" th:text="${anime.title}" ></a>
-                </td>
-                <td>
-                     <img th:src="@{${anime.large_image_url}}">
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYgUYL8k0L6CO2gmF5pDI5M9z7u9l03CDR0V2K5dGQd6zNjR9MtG29AqT" crossorigin="anonymous"></script>
 </body>
 </html>

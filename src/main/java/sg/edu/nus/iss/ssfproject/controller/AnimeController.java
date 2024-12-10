@@ -28,8 +28,8 @@ public class AnimeController {
         return "done";
     }
     
-    @GetMapping("/topanimebygenre")
-    public String topAnimeByGenre(@RequestParam(required=false,name = "genre",defaultValue="Comedy") String genre, Model model) {
+    @GetMapping("/")
+    public String topAnimeByGenre(@RequestParam(required=false,name = "genre",defaultValue="Slice of Life") String genre, Model model) {
         List<String> animeGenres = animeService.getAnimeGenres();
         model.addAttribute("animegenres",animeGenres);
         // if (genre ==null) {
@@ -39,7 +39,7 @@ public class AnimeController {
         model.addAttribute("animelist",animeListByGenre);
         return "view0";
     }
-     @PostMapping("/topanimebygenre/filter")
+     @PostMapping("/filter")
     public String filterTaskByStatus(@RequestParam(required=false,name="genre",defaultValue="Slice of Life") String genre
     ,Model model) {
         List<String> animeGenres = animeService.getAnimeGenres();
@@ -54,7 +54,7 @@ public class AnimeController {
 
     @GetMapping("/search")
     public String showSearchPage() {
-        return "view1";
+        return "view1B";
     }
 
     @PostMapping("/searchresult")
@@ -64,7 +64,7 @@ public class AnimeController {
        
         model.addAttribute("animelist",animeListByQuery);
 
-        return "view1";
+        return "view1B";
     }
 
     @GetMapping("/{animeid}")
@@ -72,7 +72,7 @@ public class AnimeController {
         Anime anime = animeService.getAnimeById(id);
         model.addAttribute("anime",anime);
 
-        return "view2";
+        return "view2B";
     }
     
 
