@@ -37,7 +37,7 @@ public class AnimeController {
         // }
         List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);
         model.addAttribute("animelist",animeListByGenre);
-        return "view0";
+        return "view0B";
     }
      @PostMapping("/filter")
     public String filterTaskByStatus(@RequestParam(required=false,name="genre",defaultValue="Slice of Life") String genre
@@ -49,7 +49,7 @@ public class AnimeController {
         System.out.println(genre);
         
 
-        return "view0"; //cannot redirect here because it will go back to the original
+        return "view0B"; //cannot redirect here because it will go back to the original
     }
 
     @GetMapping("/search")

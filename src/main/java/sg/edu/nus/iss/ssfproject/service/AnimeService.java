@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
+import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import jakarta.json.JsonReader;
@@ -119,8 +120,20 @@ public class AnimeService {
 builder.add("mal_id", anime.getMal_id() != null ? anime.getMal_id() : null);
 builder.add("large_image_url", anime.getLarge_image_url() != null ? anime.getLarge_image_url() : null);
 builder.add("title", anime.getTitle() != null ? anime.getTitle() : null);
+JsonArrayBuilder genreArrayBuilder = Json.createArrayBuilder();
 
 
+List<String> genres = anime.getGenres();
+if (genres !=null && !genres.isEmpty()) {
+    for (String genre : genres) {
+        JsonObject genreObject = Json.createObjectBuilder()
+                                      .add("name",genre)
+                                      .build();
+        genreArrayBuilder.add(genreObject);
+    }
+}
+//build first
+JsonArray genreArray = genreArrayBuilder.build();
 // Handle lists
 // JsonArrayBuilder producerArrayBuilder = Json.createArrayBuilder();
 // if (anime.getProducers() != null && !anime.getProducers().isEmpty()) {
@@ -153,7 +166,9 @@ builder.add("title", anime.getTitle() != null ? anime.getTitle() : null);
 // builder.add("genres", genreArrayBuilder.build());
 
 // Finally build the JsonObject
-JsonObject animeJsonObject = builder.build();
+JsonObject animeJsonObject = builder
+                            .add("genres",genreArray)
+                            .build();
 animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonObject.toString()); // doesnt matter put here or savelist func
 
         // JsonArrayBuilder producerBuilder = Json.createArrayBuilder();
@@ -242,10 +257,20 @@ animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonObject.t
             Integer mal_id = dataJson.getInt("mal_id");
             String large_image_url = dataJson.getString("large_image_url");
             String title = dataJson.getString("title");
+            // List<String> genres = new ArrayList<>();
+            // JsonArray genreJsonArray = dataJson.getJsonArray("genres");
+
+            // for (int i = 0; i<genreJsonArray.size();i++) {
+            //     JsonObject individualGenreJsonObject = genreJsonArray.getJsonObject(i);
+            //     String genreName = individualGenreJsonObject.getString("name");
+            //     genres.add(genreName);
+
+            // }
 
             anime.setMal_id(mal_id);
             anime.setLarge_image_url(large_image_url);
             anime.setTitle(title);
+            // anime.setGenres(genres);
             animes.add(anime);
             
         }
