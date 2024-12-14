@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import sg.edu.nus.iss.ssfproject.models.Anime;
 import sg.edu.nus.iss.ssfproject.service.AnimeService;
@@ -21,12 +20,7 @@ public class AnimeController {
     @Autowired
     AnimeService animeService;
     
-    @GetMapping("/test")
-    @ResponseBody
-    public String test() {
-        animeService.getAnimeGenre();
-        return "done";
-    }
+    
     
     @GetMapping("/")
     public String topAnimeByGenre(@RequestParam(required=false,name = "genre",defaultValue="Slice of Life") String genre, Model model) {
@@ -37,11 +31,11 @@ public class AnimeController {
         // }
         List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);
         model.addAttribute("animelist",animeListByGenre);
-        return "view0B";
+        return "view0";
     }
      @PostMapping("/filter")
     public String filterTaskByStatus(@RequestParam(required=false,name="genre",defaultValue="Slice of Life") String genre
-    ,Model model) {
+    ,Model model)  {
         List<String> animeGenres = animeService.getAnimeGenres();
         model.addAttribute("animegenres",animeGenres);
         List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);
@@ -49,12 +43,12 @@ public class AnimeController {
         System.out.println(genre);
         
 
-        return "view0B"; //cannot redirect here because it will go back to the original
+        return "view0"; //cannot redirect here because it will go back to the original
     }
 
     @GetMapping("/search")
     public String showSearchPage() {
-        return "view1B";
+        return "view1";
     }
 
     @PostMapping("/searchresult")
@@ -64,7 +58,7 @@ public class AnimeController {
        
         model.addAttribute("animelist",animeListByQuery);
 
-        return "view1B";
+        return "view1";
     }
 
     @GetMapping("/{animeid}")

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Please Login</h2>
+		<form method="POST" th:action="@{/login/verify}">
+			<div th:if="${errorMessage}" th:text="${errorMessage}"></div>
+			<table>
+				<tr>
+					<td> 
+						<label>Username:</label> 
+					</td>
+					<td>
+						<input type="text" size="30" 
+								placeholder="Please type in your username" 
+								name = "username"
+                                required>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>Password:</label>
+					</td>
+					<td>
+						<input type="password" 
+								placeholder="Please type in your password"
+								name = "password"
+                                required>
+					</td>
+				</tr>
+                <tr>
+			
+					<td>
+                        <a th:href="@{/register}">Register</a>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<button>Login</button>
+					</td>
+				</tr>
+		</form>
+    
+</body>
+</html>

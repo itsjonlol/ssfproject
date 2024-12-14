@@ -6,11 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
 import sg.edu.nus.iss.ssfproject.constant.ConstantVar;
 import sg.edu.nus.iss.ssfproject.service.AnimeService;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 public class SsfprojectApplication implements CommandLineRunner{
 
 	@Autowired

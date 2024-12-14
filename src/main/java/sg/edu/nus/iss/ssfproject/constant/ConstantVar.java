@@ -7,6 +7,7 @@ public class ConstantVar {
     public static final String genresRedisKey = "genres";
 
     public static final String animeListByGenreRedisKey = "genre";
+    public static final String usersRedisKey = "users";
 
     // public static final String redisKey = "tasks";
 }

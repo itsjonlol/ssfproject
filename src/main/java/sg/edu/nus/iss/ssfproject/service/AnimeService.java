@@ -30,6 +30,9 @@ public class AnimeService {
     @Autowired
     AnimeRepo animeRepo;
 
+    // @Autowired
+    // private ObjectMapper objectMapper;
+
     Map<String,Integer> animeGenreMap = new HashMap();
 
     RestTemplate restTemplate = new RestTemplate();
@@ -75,7 +78,7 @@ public class AnimeService {
 
     }
 
-    public List<Anime> getAnimeListByGenre(String genre) {
+    public List<Anime> getAnimeListByGenre(String genre)  {
         List<Anime> animeListByGenre = new ArrayList<>();
         // String genreId = String.valueOf(animeGenreMap.get(genre));
         String genreId = animeRepo.getValueFromHash(ConstantVar.genresRedisKey, genre);
@@ -115,6 +118,12 @@ public class AnimeService {
     // private List<String> studios;
     // private List<String> genres;
     public void saveAnimeByGenre(Anime anime,String category) {
+
+        // String animeJsonString = objectMapper.writeValueAsString(anime);
+
+        // Store the serialized anime in Redis under the category
+        // animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonString);
+        
         JsonObjectBuilder builder = Json.createObjectBuilder();
 
 builder.add("mal_id", anime.getMal_id() != null ? anime.getMal_id() : null);
@@ -126,10 +135,7 @@ JsonArrayBuilder genreArrayBuilder = Json.createArrayBuilder();
 List<String> genres = anime.getGenres();
 if (genres !=null && !genres.isEmpty()) {
     for (String genre : genres) {
-        JsonObject genreObject = Json.createObjectBuilder()
-                                      .add("name",genre)
-                                      .build();
-        genreArrayBuilder.add(genreObject);
+        genreArrayBuilder.add(genre);
     }
 }
 //build first
@@ -283,7 +289,7 @@ animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonObject.t
     public List<Anime> fetchAnimeApi(String url) {
         List<Anime> animeList = new ArrayList<>();
 
-        ResponseEntity<String> data = restTemplate.getForEntity(url, String.class); //1 is to 1 auto mapping
+        ResponseEntity<String> data = restTemplate.getForEntity(url, String.class); 
         String payload = data.getBody();
         
         InputStream is = new ByteArrayInputStream(payload.getBytes());
@@ -303,7 +309,7 @@ animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonObject.t
     }
     public Anime getAnimeById(String id) {
         String animeByIdUrl = String.format(Url.animeById,id);
-        ResponseEntity<String> data = restTemplate.getForEntity(animeByIdUrl, String.class); //1 is to 1 auto mapping
+        ResponseEntity<String> data = restTemplate.getForEntity(animeByIdUrl, String.class);
         String payload = data.getBody();
         
         InputStream is = new ByteArrayInputStream(payload.getBytes());

@@ -1,0 +1,72 @@
+<html lang="en" xmlns:th = "http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" 
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
+    crossorigin="anonymous">
+    <title>Landing Page</title>
+</head>
+<body>
+    
+
+    <!-- private String id;
+    private String username;
+    private String email;
+    private String password; -->
+
+
+    <div class = "container">
+        <div class = "row">
+            <div class = "col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
+                <h1 class = "text-center"> Register for an account</h1>
+                <div class = "card-body">
+                    <form th:action = "@{/register/verify}" th:object = "${user}" method = "POST">
+
+                        <!-- <div th:if="${#fields.hasErrors('global')}" class="alert alert-danger" role="alert">
+                            <ul>
+                                <li th:each="err : ${#fields.errors('global')}">
+                                    <span th:text="${err}"></span>
+                                </li>
+                            </ul>
+                        </div> -->
+
+
+                        <div class = "form-group">
+                            <label> Please enter username</label>
+                            <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger"></div>
+                            <input type = "text" name = "username" th:field = "*{username}" class = "form-control" placeholder = "Enter username"/>
+                        </div>
+                        <div class = "form-group">
+                            <label> Please enter email</label>
+                            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></div>
+                            <input type = "text" name = "email" th:field = "*{email}" class = "form-control" placeholder = "Enter email"/>
+                        </div>
+
+                        <div class = "form-group">
+                            <label> Please enter password </label>
+                            <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></div>
+                            <input type = "password" name = "password" th:field = "*{password}" class = "form-control" placeholder = "Enter password"/>
+                        </div>
+
+
+                
+                        
+                        
+
+                        <div class = "box-footer">
+                            <button type = "submit" class = "btn btn-primary">
+                                Submit
+                            </button>
+                        </div>
+                    
+                        
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>

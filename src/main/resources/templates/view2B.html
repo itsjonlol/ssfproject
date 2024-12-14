@@ -85,7 +85,7 @@
             <div class="col-md-4 anime-image">
                 <img th:src="@{${anime.large_image_url}}" alt="Anime Cover">
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8"><!-- if null then unknown-->
                 <div class="anime-title" th:text="${anime.title}">Anime Title</div>
                 <div class="anime-metadata">
                     <p th:text="'Japanese Title: ' + (${anime.title_japanese} ?: 'Unknown')">Japanese Title</p>
@@ -94,7 +94,7 @@
                     <p th:text="'Duration: ' + (${anime.duration} ?: 'Unknown')">Duration</p>
                     <p th:text="'Rank: #' + (${anime.rank} ?: 'Unknown')">Rank</p>
                     <p th:text="'Score: ' + (${anime.score} ?: 'Unknown')">Score</p>
-                    <p th:text="'Aired: ' + (${anime.year} ?: 'Unknown')">Aired</p>
+                    <p th:text="'Aired: ' + (${anime.year})">Aired</p>
                 </div>
                 <div class="anime-genres">
                     <span th:each="genre : ${anime.genres}" th:text="${genre} ?: 'Unknown'">Genre</span>
