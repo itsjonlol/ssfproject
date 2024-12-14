@@ -29,7 +29,7 @@
                         <a class="nav-link active" href="/logout">logout</a>
                     </li>
                     <li th:if="${verifieduser != null}" class="nav-item">
-                        <a class="nav-link active" href="/watchlist/{verifiedusername}(verifiedusername=${verifieduser.username})">See my watchlist</a>
+                        <a class="nav-link active" th:href="@{'/watchlist/' + ${verifieduser.username}}">See my watchlist</a>
                     </li>
                 </ul>
             </div>
