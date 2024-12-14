@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -69,13 +68,7 @@ public class AnimeController {
         return "view1";
     }
 
-    @GetMapping("/{animeid}")
-    public String getMethodName(@PathVariable("animeid") String id, Model model) {
-        Anime anime = animeService.getAnimeById(id);
-        model.addAttribute("anime",anime);
-
-        return "view2B";
-    }
+    
     
 
 }

@@ -1,76 +1,100 @@
 package sg.edu.nus.iss.ssfproject.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.MultiValueMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
+import sg.edu.nus.iss.ssfproject.models.Anime;
 import sg.edu.nus.iss.ssfproject.models.User;
+import sg.edu.nus.iss.ssfproject.service.AnimeService;
 import sg.edu.nus.iss.ssfproject.service.UserService;
 
 
 
 @Controller
 public class UserController {
-
+    @Autowired
+    AnimeService animeService;
+    
     @Autowired
     UserService userService;
-    
-    @GetMapping("/register")
-    public String getUserRegisterPage(Model model) {
-        User user = new User();
-        model.addAttribute("user",user);
-        return "register";
+
+    @GetMapping("/{animeid}")
+    public String showIndividualAnimePage(@PathVariable("animeid") String id, Model model,
+    HttpSession session) {
+        User verifiedUser = (User) session.getAttribute("verifieduser");
+        model.addAttribute("verifieduser",verifiedUser);
+        Anime anime = animeService.getAnimeById(id);
+        model.addAttribute("anime",anime);
+        Boolean animeInWatchList;
+        if (verifiedUser == null) {
+            animeInWatchList = false;
+            model.addAttribute("animeinwatchlist",animeInWatchList);
+        } else {
+            animeInWatchList = userService.animeInUserWatchList(anime, verifiedUser);
+            model.addAttribute("animeinwatchlist",animeInWatchList);
+
+        }
+       
+
+        return "view2B";
     }
 
-    //add bindingresult and verification
-    @PostMapping("/register/verify")
-    public String verifyUserRegistration(@Valid @ModelAttribute("user") User user,BindingResult result,
-    Model model) throws JsonProcessingException {
+    @GetMapping("/addanime/{animeid}")
+    public String addAnimeToWatchList(@PathVariable("animeid") String id,HttpSession session
+    ,Model model) throws JsonMappingException, JsonProcessingException {
+        Anime anime = animeService.getAnimeById(id); // can probably cache it
+        model.addAttribute("anime",anime);
+        User verifiedUser = (User) session.getAttribute("verifieduser");
+        model.addAttribute("verifieduser",verifiedUser);
         
-        userService.register(user);
-        return "redirect:/";
-    }
-    @GetMapping("/login")
-    public String getLoginPage() {
-        return "login";
-    }
-
-    @PostMapping("/login/verify")
-    public String verifyLogin(@RequestBody MultiValueMap<String,String> loginForm,Model model,HttpSession session) throws JsonProcessingException {
-        String username = loginForm.getFirst("username");
-        String password = loginForm.getFirst("password");
-
-        //check to see if username exists
-        if (!userService.checkIfUsernameExists(username)) {
-            model.addAttribute("errorMessage","User account does not exist");
-            return "login";
+        //required to login before adding to wishlist
+        if (session.getAttribute("verifieduser") == null) {
+            model.addAttribute("errorMessage","Please login first before adding to watchlist");
+            return "view2B";
         }
-        //verify password if username exists
-        if (!userService.checkIfPasswordMatches(username, password)) {
-            model.addAttribute("errorMessage","Invalid password");
-            return "login";
+        //if logged in
+        model.addAttribute("animeinwatchlist",userService.animeInUserWatchList(anime, verifiedUser));
+        
+        
+        if (userService.animeInUserWatchList(anime, verifiedUser)) {
+            model.addAttribute("animeinwatchlist", true);
         }
-        User verifiedUser = userService.getVerfiedUser(username);
-        session.setAttribute("verifieduser",verifiedUser);
-        //add session
-        return "redirect:/";
+        userService.addAnimeToWatchList(anime,verifiedUser);
+        model.addAttribute("animeinwatchlist", true);
+        
+        //to change "add to watchlist button to added to watchlist"
+
+        // 1) is logged in
+        // 2) have the anime on its watchlist
+
+
+    
+        return "view2B";
+    }
+    @GetMapping("/watchlist/{verifiedusername}")
+    public String seeUserWatchList(@PathVariable("verifiedusername") String username,HttpSession session
+    ,Model model) {
+
+        //need restcontroller to see someone else's watchlist..?
+
+        //for the case of verified user seeing his watchlist
+        User verifiedUser = (User) session.getAttribute("verifieduser");
+        List<Anime> verifiedUserWatchList = verifiedUser.getWatchListAnime();
+        model.addAttribute("watchlist",verifiedUserWatchList);
+        model.addAttribute("verifieduser",verifiedUser);
+
+        return "watchlist";
     }
 
-    @GetMapping("/logout")
-    public String logoutUser(HttpSession session) {
-        session.invalidate();
-        return "redirect:/";
-    }
     
     
 }

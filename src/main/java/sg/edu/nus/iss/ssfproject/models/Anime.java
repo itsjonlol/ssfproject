@@ -1,6 +1,7 @@
 package sg.edu.nus.iss.ssfproject.models;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Anime {
     
@@ -187,7 +188,19 @@ public class Anime {
     public void setSynopsis(String synopsis) {
         this.synopsis = synopsis;
     }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Anime anime = (Anime) o;
+        return Objects.equals(mal_id, anime.mal_id); // Compare by unique identifier
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(mal_id); // Use the same unique identifier
+    }
     
     
 }
