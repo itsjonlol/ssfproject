@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.http.HttpSession;
 import sg.edu.nus.iss.ssfproject.models.Anime;
+import sg.edu.nus.iss.ssfproject.models.User;
 import sg.edu.nus.iss.ssfproject.service.AnimeService;
 
 
@@ -23,7 +25,10 @@ public class AnimeController {
     
     
     @GetMapping("/")
-    public String topAnimeByGenre(@RequestParam(required=false,name = "genre",defaultValue="Slice of Life") String genre, Model model) {
+    public String topAnimeByGenre(@RequestParam(required=false,name = "genre",defaultValue="Slice of Life") String genre,
+     Model model,HttpSession session) {
+        User verifiedUser = (User) session.getAttribute("verifieduser");
+        model.addAttribute("verifieduser",verifiedUser);
         List<String> animeGenres = animeService.getAnimeGenres();
         model.addAttribute("animegenres",animeGenres);
         // if (genre ==null) {
@@ -35,7 +40,10 @@ public class AnimeController {
     }
      @PostMapping("/filter")
     public String filterTaskByStatus(@RequestParam(required=false,name="genre",defaultValue="Slice of Life") String genre
-    ,Model model)  {
+    ,Model model,HttpSession session)  {
+
+        User verifiedUser = (User) session.getAttribute("verifieduser");
+        model.addAttribute("verifieduser",verifiedUser);
         List<String> animeGenres = animeService.getAnimeGenres();
         model.addAttribute("animegenres",animeGenres);
         List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);

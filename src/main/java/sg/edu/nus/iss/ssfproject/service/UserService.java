@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import sg.edu.nus.iss.ssfproject.constant.ConstantVar;
@@ -50,6 +51,11 @@ public class UserService {
         //compare the plain text password with the encrypted password
         return passwordEncoder.matches(password, user.getPassword());
     }
-    
+
+    public User getVerfiedUser(String username) throws JsonMappingException, JsonProcessingException {
+        String userJsonString = userRepo.getValueFromHash(ConstantVar.usersRedisKey,username.trim().toLowerCase());
+        User user = objectMapper.readValue(userJsonString, User.class);
+        return user;
+    }
     
 }

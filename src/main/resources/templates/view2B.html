@@ -94,10 +94,13 @@
                     <p th:text="'Duration: ' + (${anime.duration} ?: 'Unknown')">Duration</p>
                     <p th:text="'Rank: #' + (${anime.rank} ?: 'Unknown')">Rank</p>
                     <p th:text="'Score: ' + (${anime.score} ?: 'Unknown')">Score</p>
-                    <p th:text="'Aired: ' + (${anime.year})">Aired</p>
+                    <p th:text="'Aired: ' + (${anime.year} ? : 'Unknown')">Aired</p>
                 </div>
                 <div class="anime-genres">
                     <span th:each="genre : ${anime.genres}" th:text="${genre} ?: 'Unknown'">Genre</span>
+                </div>
+                <div>
+                    <a th:href="@{/}">Add to watchlist</a>
                 </div>
             </div>
         </div>

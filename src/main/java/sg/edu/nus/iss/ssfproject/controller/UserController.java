@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import sg.edu.nus.iss.ssfproject.models.User;
 import sg.edu.nus.iss.ssfproject.service.UserService;
 
@@ -32,7 +34,8 @@ public class UserController {
 
     //add bindingresult and verification
     @PostMapping("/register/verify")
-    public String verifyUserRegistration(@ModelAttribute("user") User user,Model model) throws JsonProcessingException {
+    public String verifyUserRegistration(@Valid @ModelAttribute("user") User user,BindingResult result,
+    Model model) throws JsonProcessingException {
         
         userService.register(user);
         return "redirect:/";
@@ -57,7 +60,15 @@ public class UserController {
             model.addAttribute("errorMessage","Invalid password");
             return "login";
         }
+        User verifiedUser = userService.getVerfiedUser(username);
+        session.setAttribute("verifieduser",verifiedUser);
         //add session
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logoutUser(HttpSession session) {
+        session.invalidate();
         return "redirect:/";
     }
     

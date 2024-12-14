@@ -83,10 +83,22 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="/search">Search</a>
                     </li>
+                    <li th:if="${verifieduser == null}" class="nav-item">
+                        <a class="nav-link active" href="/register">Register</a>
+                    </li>
+                    <li th:if="${verifieduser == null}" class="nav-item">
+                        <a class="nav-link active" href="/login">Login</a>
+                    </li>
+                    <li th:if="${verifieduser != null}" class="nav-item">
+                        <a class="nav-link active" href="/logout">logout</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
+    <div th:if="${verifieduser != null}" class="container">
+        <p th:text="'Hello ' + ${verifieduser.username}"></p>
+    </div>
     
     <div class="container mt-5">
         <h1 class="text-center mb-4">Anime List</h1>
