@@ -7,6 +7,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
+    <style>
+    body {
+        background-color: #121212;
+        color: #ffffff;
+    }
+    </style>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
@@ -28,9 +34,14 @@
                     <li th:if="${verifieduser != null}" class="nav-item">
                         <a class="nav-link active" href="/logout">logout</a>
                     </li>
+                    
                     <li th:if="${verifieduser != null}" class="nav-item">
                         <a class="nav-link active" th:href="@{'/watchlist/' + ${verifieduser.username}}">See my watchlist</a>
                     </li>
+                    <li th:if="${verifieduser != null}" class="nav-item">
+                        <p th:text="'Hello ' + ${verifieduser.username}"></p>
+                    </li>
+                    
                 </ul>
             </div>
         </div>

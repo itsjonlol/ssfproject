@@ -21,7 +21,7 @@ public class AnimeRepo {
     @Autowired
     @Qualifier(ConstantVar.template01)
     private RedisTemplate<String, String> template;
-
+    // to add more?
     public List<String> animeGenres() {
         List<String> animeGenres = new ArrayList<>(Arrays.asList("Slice of Life",
                                                                         "Comedy",
@@ -34,7 +34,15 @@ public class AnimeRepo {
                                                                         "Seinen",
                                                                         "Horror",
                                                                         "Shounen",
-                                                                        "Adventure"
+                                                                        "Adventure",
+                                                                        "Avant Garde",
+                                                                        "Award Winning",
+                                                                        "Drama",
+                                                                        "Gourmet",
+                                                                        "Mystery",
+                                                                        "Supernatural",
+                                                                        "Suspense",
+                                                                        "Sci-Fi"
                                                                         ));
 
         return animeGenres;

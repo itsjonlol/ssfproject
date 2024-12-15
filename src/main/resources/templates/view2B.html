@@ -87,6 +87,9 @@
                     <li th:if="${verifieduser != null}" class="nav-item">
                         <a class="nav-link active" th:href="@{'/watchlist/' + ${verifieduser.username}}">See my watchlist</a>
                     </li>
+                    <li th:if="${verifieduser != null}" class="nav-item">
+                        <p th:text="'Hello ' + ${verifieduser.username}"></p>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -104,6 +107,7 @@
                     <p th:text="'Episodes: ' + (${anime.episodes} ?: 'Unknown')">Episodes</p>
                     <p th:text="'Status: ' + (${anime.status} ?: 'Unknown')">Status</p>
                     <p th:text="'Duration: ' + (${anime.duration} ?: 'Unknown')">Duration</p>
+                    <p th:text="'Type: ' + (${anime.type} ?: 'Unknown')">Type</p>
                     <p th:text="'Rank: #' + (${anime.rank} ?: 'Unknown')">Rank</p>
                     <p th:text="'Score: ' + (${anime.score} ?: 'Unknown')">Score</p>
                     <p th:text="'Aired: ' + (${anime.year} ?: 'Unknown')">Aired</p>

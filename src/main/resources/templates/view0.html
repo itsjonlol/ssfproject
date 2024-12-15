@@ -95,13 +95,14 @@
                     <li th:if="${verifieduser != null}" class="nav-item">
                         <a class="nav-link active" th:href="@{'/watchlist/' + ${verifieduser.username}}">See my watchlist</a>
                     </li>
+                    <li th:if="${verifieduser != null}" class="nav-item">
+                        <span th:text="'Hello ' + ${verifieduser.username}"></span>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
-    <div th:if="${verifieduser != null}" class="container">
-        <p th:text="'Hello ' + ${verifieduser.username}"></p>
-    </div>
+   
     
     <div class="container mt-5">
         <h1 class="text-center mb-4">Anime List</h1>

@@ -1,5 +1,8 @@
 package sg.edu.nus.iss.ssfproject.repo;
 
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -27,5 +30,13 @@ public class UserRepo {
     }
     public Boolean hasKey(String redisKey, String mapKey) { //hexists c01 email
         return template.opsForHash().hasKey(redisKey, mapKey);
+    }
+    public List<Object> getAllValuesFromHash(String redisKey) {
+    
+        return (List<Object>) template.opsForHash().values(redisKey); //hvals c01
+        
+    }
+    public Set<Object> getAllKeysFromHash(String redisKey) {
+        return template.opsForHash().keys(redisKey); //hkeys c01
     }
 }

@@ -98,7 +98,7 @@ public class UserController {
     }
     @GetMapping("/watchlist/recommend/{verifiedusername}")
     public String getRecommendedAnime(@PathVariable("verifiedusername") String username,HttpSession session
-    ,Model model) {
+    ,Model model) throws JsonProcessingException {
 
         //need restcontroller to see someone else's watchlist..?
 

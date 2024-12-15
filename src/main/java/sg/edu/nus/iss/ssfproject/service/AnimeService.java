@@ -33,14 +33,14 @@ public class AnimeService {
     // @Autowired
     // private ObjectMapper objectMapper;
 
-    Map<String,Integer> animeGenreMap = new HashMap();
+    Map<String,Integer> animeGenreMap;
 
     RestTemplate restTemplate = new RestTemplate();
 
     public void getAnimeGenre() {
-        
+        animeGenreMap = new HashMap<>();
         //get list of anime categories i want to show in my display page
-        List<String> animeGenres = this.getAnimeGenres();
+        // List<String> animeGenres = this.getAnimeGenres();
         
         ResponseEntity<String> standardGenreData = restTemplate.getForEntity(Url.animeGenres+"?filter=genres", String.class);
         
@@ -327,6 +327,11 @@ animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonObject.t
 
     }
 
+    public Map<String, Integer> getAnimeGenreMap() {
+        return animeGenreMap;
+    }
+
+    
     
     
     
