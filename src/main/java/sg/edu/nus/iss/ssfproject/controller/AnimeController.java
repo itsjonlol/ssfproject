@@ -55,7 +55,7 @@ public class AnimeController {
 
     @GetMapping("/search")
     public String showSearchPage() {
-        return "view1";
+        return "view1B";
     }
 
     @PostMapping("/searchresult")
@@ -65,7 +65,7 @@ public class AnimeController {
        
         model.addAttribute("animelist",animeListByQuery);
 
-        return "view1";
+        return "view1B";
     }
 
     

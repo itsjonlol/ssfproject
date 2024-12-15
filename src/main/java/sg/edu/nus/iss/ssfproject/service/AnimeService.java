@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -250,9 +252,19 @@ animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonObject.t
     public List<Anime> getAnimeListByQuery(String query) {
         String animeByQueryUrl = String.format(Url.animesByQuery,query);
         List<Anime> animeListByQuery = this.fetchAnimeApi(animeByQueryUrl);
-        return animeListByQuery;
+        Set<String> allowedTypes = Set.of("tv", "movie", "ova","ona","tv_special");
+    
+    // Filter the anime list to include only allowed types
+        // return animeListByQuery.stream()
+        //     .filter(anime -> allowedTypes.contains(anime.getType()))
+        //     .collect(Collectors.toList());
+        // 
+        return animeListByQuery.stream()
+    .filter(anime -> anime.getType() != null && allowedTypes.contains(anime.getType().toLowerCase()))
+    .collect(Collectors.toList());}
+        // return animeListByQuery;}
 
-    }
+    
 
     public List<Anime> getCachedAnimesByGenre(String genre) {
         List<Object> objectList = animeRepo.getAllValuesFromHash(genre);
