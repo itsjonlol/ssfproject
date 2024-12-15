@@ -1,7 +1,11 @@
 package sg.edu.nus.iss.ssfproject.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,6 +64,50 @@ public class UserService {
         } 
         return watchListAnime.contains(anime);
 
+    }
+
+
+    //recommends anime based on user's watchlist
+    public List<Anime> recommendAnimeForUser(User verifiedUser) {
+
+        List<Anime> recommendedAnimeList = verifiedUser.getWatchListAnime();
+
+        
+        List<Anime> watchListAnime = verifiedUser.getWatchListAnime();
+        if (watchListAnime == null) {
+            watchListAnime = new ArrayList<>();
+        } 
+        if (recommendedAnimeList == null) {
+            recommendedAnimeList= new ArrayList<>();
+        } 
+        //algorithm 1: recommend generic top anime if size of watchlist is less than 5
+        // if (watchListAnime.size() <= 5) {
+            
+        // }
+        //algorithm 2: recommend anime based on the top genre of 5 random anime in user's watchlist
+        List<Anime> shuffledList = new ArrayList<>(watchListAnime);
+        Collections.shuffle(shuffledList);
+
+        //get the list of 5 random anime from watchlist
+        List<Anime> first5AnimeRandomList = shuffledList.stream().limit(5).collect(Collectors.toList());
+        Map<String,Integer> genreCount = new HashMap<>();
+
+        for (Anime anime : first5AnimeRandomList) {
+            List<String> animeGenres = anime.getGenres();
+            for (String genre : animeGenres) {
+                Integer count = genreCount.get(genre);
+                if (count == null) {
+                    genreCount.put(genre, 1);
+                } else {
+                    genreCount.put(genre,count+1);
+                }
+            }
+        }
+        String favGenre = genreCount.entrySet().stream().max(Map.Entry.comparingByValue()).map(Map.Entry::getKey).orElse(null);
+
+        System.out.println(favGenre);
+        
+        return recommendedAnimeList;
     }
 
 

@@ -42,28 +42,33 @@ public class AnimeService {
         //get list of anime categories i want to show in my display page
         List<String> animeGenres = this.getAnimeGenres();
         
-        ResponseEntity<String> data = restTemplate.getForEntity(Url.animeGenres, String.class); //1 is to 1 auto mapping
-        String payload = data.getBody();
+        ResponseEntity<String> standardGenreData = restTemplate.getForEntity(Url.animeGenres+"?filter=genres", String.class);
         
+        ResponseEntity<String> demographicGenreData = restTemplate.getForEntity(Url.animeGenres+"?filter=demographics", String.class);
+        
+        processGenreResponse(standardGenreData.getBody());
+        processGenreResponse(demographicGenreData.getBody());
+        
+        System.out.println(animeGenreMap.size());
+        animeGenreMap.forEach((key, value) -> System.out.println(key + ":" + value));
+        //map the anime category to its mal_id. so that i can call the api to get the top anime by its genre id
+    }
+    
+    // Helper method to process the API response
+    private void processGenreResponse(String payload) {
         InputStream is = new ByteArrayInputStream(payload.getBytes());
         JsonReader reader = Json.createReader(is);
         JsonObject jsonObject = reader.readObject();
         JsonArray jArray = jsonObject.getJsonArray("data");
 
-
-        for (int i = 0; i <jArray.size();i++) {
+        for (int i = 0; i < jArray.size(); i++) {
             JsonObject jObject = jArray.getJsonObject(i);
             String genreName = jObject.getString("name");
-            if (animeGenres.contains(genreName) ) {
-                animeGenreMap.put(genreName,jObject.getInt("mal_id"));
-                animeRepo.setHash(ConstantVar.genresRedisKey, genreName, String.valueOf(jObject.getInt("mal_id")));
-            }
-            
+            animeGenreMap.put(genreName, jObject.getInt("mal_id"));
+            animeRepo.setHash(ConstantVar.genresRedisKey, genreName, String.valueOf(jObject.getInt("mal_id")));
         }
-        System.out.println(animeGenreMap.size());
-        animeGenreMap.forEach((key, value) -> System.out.println(key + ":" + value));
-        //map the anime category to its mal_id. so that i can call the api to get the top anime by its genre id
     }
+    
     public Boolean hasRedisKey(String redisKey) {
         return animeRepo.hashExists(redisKey);
 

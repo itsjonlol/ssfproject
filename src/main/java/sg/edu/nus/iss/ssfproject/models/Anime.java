@@ -201,6 +201,18 @@ public class Anime {
     public int hashCode() {
         return Objects.hash(mal_id); // Use the same unique identifier
     }
+
+
+
+
+
+    @Override
+    public String toString() {
+        return "Anime [mal_id=" + mal_id + ", large_image_url=" + large_image_url + ", title=" + title
+                + ", title_japanese=" + title_japanese + ", type=" + type + ", episodes=" + episodes + ", status="
+                + status + ", duration=" + duration + ", score=" + score + ", rank=" + rank + ", synopsis=" + synopsis
+                + ", year=" + year + ", producers=" + producers + ", studios=" + studios + ", genres=" + genres + "]";
+    }
     
     
 }

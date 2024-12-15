@@ -96,6 +96,23 @@ public class UserController {
 
         return "watchlist";
     }
+    @GetMapping("/watchlist/recommend/{verifiedusername}")
+    public String getRecommendedAnime(@PathVariable("verifiedusername") String username,HttpSession session
+    ,Model model) {
+
+        //need restcontroller to see someone else's watchlist..?
+
+        //need to account for other's watchlist
+
+        //for the case of verified user seeing his watchlist
+        User verifiedUser = (User) session.getAttribute("verifieduser");
+        List<Anime> verifiedUserWatchList = verifiedUser.getWatchListAnime();
+        model.addAttribute("watchlist",verifiedUserWatchList);
+        model.addAttribute("verifieduser",verifiedUser);
+        userService.recommendAnimeForUser(verifiedUser);
+
+        return "watchlist";
+    }
 
     
     
