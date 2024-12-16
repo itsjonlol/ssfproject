@@ -29,15 +29,16 @@
         color: white /* Change color on hover */
     }
     </style>
-    <div th:replace="~{navbar :: navbar}"></div>
-    <!DOCTYPE html>
+    
 
 
 <body>
+    <div th:replace="~{navbar :: navbar}"></div>
+
     <div class="container">
         <h1 >My Watchlist</h1>
         <div class="list-group list-group-flush">
-            <div class="list-group-item d-flex mb-1 align-items-center bg-black" th:each="anime : ${watchlist}">
+            <div class="list-group-item d-flex align-items-center bg-black" th:each="anime : ${watchlist}">
                 <!-- Anime Image -->
                 <img th:src="${anime.large_image_url}" alt="Anime Image" class="img-fluid rounded me-3" style="width: 100px; height: auto;">
                 
