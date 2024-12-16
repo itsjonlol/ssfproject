@@ -65,6 +65,27 @@ public class UserService {
         
         
     }
+    public void deleteAnimeInWatchList(Anime anime, User verifiedUser) throws JsonProcessingException {
+
+        List<Anime> watchListAnime = verifiedUser.getWatchListAnime();
+        if (watchListAnime == null) {
+            watchListAnime = new ArrayList<>();
+        } 
+
+        //delete anime from watchlist
+        watchListAnime.remove(anime);
+
+         //update watchlistanime
+         verifiedUser.setWatchListAnime(watchListAnime);
+         //update current session user details
+         
+ 
+         //update userjsonstring and store it back into redis
+         String userJsonString = objectMapper.writeValueAsString(verifiedUser);
+         
+         userRepo.setHash(ConstantVar.usersRedisKey,verifiedUser.getUsername().trim().toLowerCase(), userJsonString);
+
+    }
 
     public Boolean animeInUserWatchList(Anime anime,User verifiedUser) { 
 

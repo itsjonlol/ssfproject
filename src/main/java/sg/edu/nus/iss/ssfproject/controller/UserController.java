@@ -114,6 +114,25 @@ public class UserController {
         return "watchlist";
     }
 
+    @GetMapping("/deleteanime/{animeid}")
+    public String deleteAnimeInWatchList(@PathVariable("animeid") String id,HttpSession session
+    ,Model model) throws JsonMappingException, JsonProcessingException {
+        Anime anime = animeService.getAnimeById(id); 
+        
+        User verifiedUser = (User) session.getAttribute("verifieduser");
+        model.addAttribute("verifieduser",verifiedUser);
+        List<Anime> verifiedUserWatchList = verifiedUser.getWatchListAnime();
+        model.addAttribute("watchlist",verifiedUserWatchList);
+        
+        userService.deleteAnimeInWatchList(anime, verifiedUser);
+        
+        
+
+
+    
+        return "watchlist";
+    }
+
     
     
 }

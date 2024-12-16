@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
     <style>
@@ -12,43 +13,51 @@
         background-color: #121212;
         color: #ffffff;
     }
-    </style>
+    .custom-navbar {
+        background-color: peachpuff;
+        /* background: linear-gradient(to bottom, #6a1b9a, #000000); Purple to Black Gradient */
+        color: black; /* Text color */
+        font-weight:bold;
+        
+    }
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Anime Finder</a>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/search">Search</a>
-                    </li>
-                    <li th:if="${verifieduser == null}" class="nav-item">
-                        <a class="nav-link active" href="/register">Register</a>
-                    </li>
-                    <li th:if="${verifieduser == null}" class="nav-item">
-                        <a class="nav-link active" href="/login">Login</a>
-                    </li>
-                    <li th:if="${verifieduser != null}" class="nav-item">
-                        <a class="nav-link active" href="/logout">logout</a>
-                    </li>
-                    
-                    <li th:if="${verifieduser != null}" class="nav-item">
-                        <a class="nav-link active" th:href="@{'/watchlist/' + ${verifieduser.username}}">See my watchlist</a>
-                    </li>
-                    <li th:if="${verifieduser != null}" class="nav-item">
-                        <p th:text="'Hello ' + ${verifieduser.username}"></p>
-                    </li>
-                    
-                </ul>
+    .custom-navbar .navbar-nav .nav-link {
+        color: black; /* White color for navbar links */
+    }
+
+    .custom-navbar .navbar-nav .nav-link:hover {
+        color: white /* Change color on hover */
+    }
+    </style>
+    <div th:replace="~{navbar :: navbar}"></div>
+    <!DOCTYPE html>
+
+
+<body>
+    <div class="container">
+        <h1 >My Watchlist</h1>
+        <div class="list-group list-group-flush">
+            <div class="list-group-item d-flex mb-1 align-items-center bg-black" th:each="anime : ${watchlist}">
+                <!-- Anime Image -->
+                <img th:src="${anime.large_image_url}" alt="Anime Image" class="img-fluid rounded me-3" style="width: 100px; height: auto;">
+                
+                <!-- Anime Title and Rank -->
+                <div class="me-auto"> 
+                    <a th:href="@{'/' + ${anime.mal_id}}" th:text="${anime.title}" class="fw-bold text-decoration-none text-white"></a>
+
+                    <p class="mb-0 text-white">Rank: <span th:text="${anime.rank}"></span></p>
+                </div>
+                <a class = "btn btn-danger" th:href="@{'/deleteanime/' + ${anime.mal_id}}">Delete</a>
+                
             </div>
         </div>
-    </nav>
+    </div>
+</body>
+</html>
 
+    
 
-    <div class = "container">
+    <!-- <div class = "container">
        
         
         <a th:href="@{/watchlist/recommend/{verifiedusername}(verifiedusername = ${verifieduser.username})}">Recommend Anime for me</a>
@@ -74,10 +83,11 @@
                 </tr>
             </tbody>
         </table>
-    </div>
+    </div> -->
         
        
     
-    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>
 </html>

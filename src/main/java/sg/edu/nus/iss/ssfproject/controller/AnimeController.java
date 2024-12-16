@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -55,18 +56,38 @@ public class AnimeController {
 
         return "view0"; //cannot redirect here because it will go back to the original
     }
+    @GetMapping("/filter/{genrename}")
+    public String filterTaskByGenre(@PathVariable("genrename") String genre
+    ,Model model,HttpSession session)  {
+
+        User verifiedUser = (User) session.getAttribute("verifieduser");
+        model.addAttribute("verifieduser",verifiedUser);
+        List<String> animeGenres = animeService.getAnimeGenres();
+        model.addAttribute("animegenres",animeGenres);
+        List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);
+        model.addAttribute("animelist",animeListByGenre);
+        model.addAttribute("selectedgenre",genre);
+        System.out.println(genre);
+        
+
+        return "view0"; //cannot redirect here because it will go back to the original
+    }
 
     @GetMapping("/search")
-    public String showSearchPage() {
+    public String showSearchPage(Model model,HttpSession session) {
+        User verifiedUser = (User) session.getAttribute("verifieduser");
+        model.addAttribute("verifieduser",verifiedUser);
         return "view1B";
     }
 
     @PostMapping("/searchresult")
-    public String showAnime(@RequestParam String query,Model model) {
+    public String showAnime(@RequestParam String query,Model model,HttpSession session) {
         
         List<Anime> animeListByQuery = animeService.getAnimeListByQuery(query);
        
         model.addAttribute("animelist",animeListByQuery);
+        User verifiedUser = (User) session.getAttribute("verifieduser");
+        model.addAttribute("verifieduser",verifiedUser);
 
         return "view1B";
     }
