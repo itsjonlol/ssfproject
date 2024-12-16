@@ -30,11 +30,13 @@ public class AnimeController {
         model.addAttribute("verifieduser",verifiedUser);
         List<String> animeGenres = animeService.getAnimeGenres();
         model.addAttribute("animegenres",animeGenres);
+        
         // if (genre ==null) {
         //     genre = "Slice of Life"; // default value
         // }
         List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);
         model.addAttribute("animelist",animeListByGenre);
+        model.addAttribute("selectedgenre",genre);
         return "view0";
     }
      @PostMapping("/filter")
@@ -47,6 +49,7 @@ public class AnimeController {
         model.addAttribute("animegenres",animeGenres);
         List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);
         model.addAttribute("animelist",animeListByGenre);
+        model.addAttribute("selectedgenre",genre);
         System.out.println(genre);
         
 

@@ -29,7 +29,6 @@ public class AnimeRepo {
                                                                         "Romance",
                                                                         "Shoujo",
                                                                         "Fantasy",
-                                                                        "Psychological",
                                                                         "Action",
                                                                         "Seinen",
                                                                         "Horror",

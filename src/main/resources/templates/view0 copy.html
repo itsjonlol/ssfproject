@@ -11,49 +11,33 @@
             color: #ffffff;
         }
 
-        .anime-card {
-            /* background-color: #343a40; */
+        /* .anime-card {
+            background-color: #343a40;
             color: #ffffff;
-            border-radius: 10px;
+            border-radius: 8px;
             overflow: hidden;
-            transition:  0.3s;
-        }
+            transition: transform 0.3s;
+        } */
 
-
-        .anime-card:hover {
-            transform: scale(1.1);
-            z-index: 2;
-        }
+        /* .anime-card:hover {
+            transform: scale(1.05);
+        } */
 
         .anime-image {
             width: 100%;
-            height: 280px;
+            height: 300px;
             object-fit: cover;
         }
 
-        .anime-title {
-            padding: 5px;
-            /* text-align: center; */
+        /* .anime-title {
+            padding: 10px;
+            text-align: center;
             font-weight: bold;
-            font-size: 0.9rem;
-            /* overflow: hidden; */
-            /* white-space: nowrap; */
-            /* text-overflow: ellipsis; */
-        }
-
-        #genre {
-    min-height: 40px; /* Adjust this value to your liking */
-}
-.filter-container {
-    min-height: 60px; /* Ensure enough space for the dropdown */
-}
-
-.filter-container {
-    padding: 0;
-    margin: 0;
-}
-
-
+            font-size: 1.2rem;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        } */
 
         .filter-container {
             margin-bottom: 20px;
@@ -135,33 +119,20 @@
 
         <!-- Filter Section -->
         <div class="row filter-container">
-    <div class="col">
-        <form method="POST" th:action="@{/filter}" class="d-flex">
-            <label for="genre" class="filter-label">Filter by Genre:</label>
-            
-            <!-- Bootstrap Dropdown -->
-            <div class="dropdown me-2">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span th:text="${selectedgenre}">Select Genre</span> <!-- Display selected genre -->
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <!-- Loop through genres and create a dropdown item for each -->
-                    <li th:each="genre : ${animegenres}">
-                        <a class="dropdown-item" th:href="@{/filter?genre=${genre}}" th:text="${genre}"></a>
-                    </li>
-                </ul>
+            <div class="col-md-8 offset-md-2 d-flex justify-content-center">
+                <form method="POST" th:action="@{/filter}" class="d-flex">
+                    <label for="genre" class="filter-label">Filter by Genre:</label>
+                    <select name="genre" id="genre" class="me-2">
+                        <option th:each="genre : ${animegenres}" th:value="${genre}" th:text="${genre}"></option>
+                    </select>
+                    <button type="submit" class="filter-button">Filter</button>
+                </form>
             </div>
-
-            <!-- Filter Button -->
-            <button type="submit" class="btn btn-primary filter-button">Filter</button>
-        </form>
-    </div>
-</div>
-
+        </div>
 
         <!-- Anime Cards Section -->
-        <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
-            <div class="col-6 col-sm-4 col-lg-2" th:each="anime : ${animelist}">
+        <div class="row g-4">
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2" th:each="anime : ${animelist}">
                 <div class="anime-card">
                     <a th:href="@{'/' + ${anime.mal_id}}" >
                     <img th:src="@{${anime.large_image_url}}" alt="Anime Image" class="anime-image">
@@ -188,7 +159,7 @@
             </div>
     
             <!-- Middle: Powered By -->
-            <div class="text-muted d-flex align-items-center text-center">
+            <div class="text-muted text-center m-0">
                 Powered by <a href="https://jikan.moe" target="_blank" class="text-decoration-none">Jikan API</a>
             </div>
 
