@@ -82,7 +82,10 @@ public class AnimeController {
 
     @PostMapping("/searchresult")
     public String showAnime(@RequestParam String query,Model model,HttpSession session) {
-        
+        if (!query.matches("[a-zA-Z0-9]+")) {
+            model.addAttribute("errorMessage","Invalid input");
+            return "view1B";
+        }
         List<Anime> animeListByQuery = animeService.getAnimeListByQuery(query);
        
         model.addAttribute("animelist",animeListByQuery);

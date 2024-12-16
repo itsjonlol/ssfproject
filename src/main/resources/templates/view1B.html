@@ -104,6 +104,7 @@
         <input class="form-control mr-sm-2 me-2 w-50" type="search" name="query" placeholder="Search for an anime..." aria-label="Search">
         <button class="btn custom-btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>
+    <div th:if="${errorMessage}" th:text="${errorMessage}"></div>
       
     <!-- <form action="/searchresult" method="POST">
         <input type="text" name="query" placeholder="Search for an anime...">

@@ -250,6 +250,8 @@ animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonObject.t
     // }
 
     public List<Anime> getAnimeListByQuery(String query) {
+        
+        System.out.println(query);
         String animeByQueryUrl = String.format(Url.animesByQuery,query);
         List<Anime> animeListByQuery = this.fetchAnimeApi(animeByQueryUrl);
         Set<String> allowedTypes = Set.of("tv", "movie", "ova","ona","tv_special");
