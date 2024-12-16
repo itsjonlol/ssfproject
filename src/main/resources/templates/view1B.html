@@ -7,14 +7,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
     <style>
-        * {
+        /* * {
             padding: 0;
             margin: 0;
             box-sizing: border-box;
             font-family: sans-serif;
-        }
+        } */
         body {
-            background-color: #01000c;
+            background-color: black;
             color: #fff;
             text-align: center;
         }
@@ -37,34 +37,46 @@
             border-radius: 10px;
             -webkit-box-reflect: below 1px linear-gradient(transparent, transparent, #0002, #0004);
         }
-        form {
-            margin: 20px auto;
-            width: 50%;
+        .swiper-slide {
+  opacity: 0.7;
+}
+
+.swiper-slide-active {
+  opacity: 1;
+}
+        .custom-btn {
+            background-color: peachpuff;
+            color:black;
+            font-weight:bold;
         }
-        input[type="text"] {
+
+
+        
+        /* form {
+            margin: 10px auto;
+            width: 50%;
+        } */
+        /* input[type="text"] {
             width: 70%;
             padding: 10px;
             margin-right: 10px;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
+        } */
+        
         .swiper-pagination-bullet {
             background-color: #fff;
             opacity: 0.5;
         }
         .swiper-pagination-bullet-active {
-            background-color: #007bff;
+            background-color: peachpuff;
             opacity: 1;
         }
+        .swiper-button-next,.swiper-button-prev {
+            margin-top: 10rem;
+            color: peachpuff;
+            /* font-size:16px; */
+        }
+        
+
         .custom-navbar {
         background-color: peachpuff;
         /* background: linear-gradient(to bottom, #6a1b9a, #000000); Purple to Black Gradient */
@@ -73,29 +85,33 @@
         
     }
 
-    .custom-navbar .navbar-nav .nav-link {
-        color: black; /* White color for navbar links */
-    }
+        .custom-navbar .navbar-nav .nav-link {
+            color: black; /* White color for navbar links */
+        }
 
-    .custom-navbar .navbar-nav .nav-link:hover {
-        color: white /* Change color on hover */
-    }
-
+        .custom-navbar .navbar-nav .nav-link:hover {
+            color: white /* Change color on hover */
+        }
         
     </style>
 </head>
 <body>
     <div th:replace="~{navbar :: navbar}"></div>
-    <h1>Search Anime</h1>
+    <h1>Lookup your favourite anime</h1>
 
     <!-- Search Form -->
-    <form action="/searchresult" method="POST">
+    <form class="d-flex my-lg-0 pb-5 m-auto justify-content-center" th:action="@{/searchresult}" method="POST">
+        <input class="form-control mr-sm-2 me-2 w-50" type="search" name="query" placeholder="Search for an anime..." aria-label="Search">
+        <button class="btn custom-btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+      
+    <!-- <form action="/searchresult" method="POST">
         <input type="text" name="query" placeholder="Search for an anime...">
         <button type="submit">Search</button>
-    </form>
+    </form> -->
 
     <!-- Swiper Component -->
-    <div class="swiper mySwiper">
+    <div class="swiper mySwiper" >
         <div class="swiper-wrapper">
             <!-- Dynamic Anime Slides -->
             <div class="swiper-slide" th:each="anime : ${animelist}">
@@ -113,9 +129,13 @@
             </div> -->
             
         </div>
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-pagination"></div>
+        
+            
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+    
+        
     </div>
     
 
@@ -148,6 +168,10 @@
                 depth: 300,
                 modifier: 1,
                 slideShadows: true,
+            },
+            keyboard: {
+            enabled: true,    // Enable keyboard navigation
+            onlyInViewport: true,  // Only listen for keypresses when the swiper is in view
             },
             loop: false,
             // loop: true,
