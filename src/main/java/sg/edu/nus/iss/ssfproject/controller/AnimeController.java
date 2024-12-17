@@ -23,7 +23,9 @@ public class AnimeController {
     AnimeService animeService;
     
     @GetMapping("/landing")
-    public String getLanding() {
+    public String getLanding(Model model,HttpSession session) {
+        User verifiedUser = (User) session.getAttribute("verifieduser");
+        model.addAttribute("verifieduser",verifiedUser);
         return "landing";
     }
     
