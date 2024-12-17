@@ -22,6 +22,11 @@ public class AnimeController {
     @Autowired
     AnimeService animeService;
     
+    @GetMapping("/landing")
+    public String getLanding() {
+        return "landing";
+    }
+    
     
     
     @GetMapping("/")

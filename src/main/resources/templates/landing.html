@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+   
+   
+    
+    <style>
+        
+
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.9)), url(/images/landingbg2.webp);
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    height: 100vh;
+    overflow: hidden; /* Keeps the page from scrolling */
+    margin: 0;
+}
+
+.hero-section {
+    position: relative;
+    background-image: url('path/to/your/image.jpg'); /* Update with actual path */
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+    z-index: 1; /* Ensure it's behind the text */
+}
+
+.hero-text {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2; /* Ensure it is above the overlay */
+}
+
+.hero-text h1 {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.hero-text p {
+    font-size: 1.25rem;
+}
+
+.site-links {
+    position: absolute;
+    bottom: 100px; /* Adjust this value to move the links up */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3; /* Ensure links are above the overlay */
+}
+
+.site-links ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.site-links ul li {
+    display: inline-block;
+    margin: 0 15px;
+}
+
+.site-links ul li a {
+    color: white;
+    font-size: 1.25rem;  /* Font size for links */
+    text-decoration: none;
+}
+
+.site-links ul li a:hover {
+    text-decoration: underline;
+}
+
+
+
+
+
+.custom-navbar {
+        background-color: rgba(0,0,0,0.5);
+        /* background: linear-gradient(to bottom, #6a1b9a, #000000); Purple to Black Gradient */
+        color: white; /* Text color */
+        font-weight:bold;
+        
+    }
+
+    .custom-navbar .navbar-nav .nav-link {
+        color: white; /* White color for navbar links */
+    }
+
+    .custom-navbar .navbar-nav .nav-link:hover {
+        color: purple /* Change color on hover */
+    }
+
+
+
+    </style>
+    
+  </head>
+  <body>
+    
+    
+    <body>
+        <div th:replace="~{navbar :: navbar}"></div>
+    
+        <div class="container-fluid hero-section">
+            <div class="overlay"></div>
+            <div class="hero-text">
+                <h1>Explore, Discover, Enjoy Anime</h1>
+                <p>Enjoy Subete.</p>
+            </div>
+            <div class="site-links">
+                <ul class="list-inline text-center">
+                    <li class="list-inline-item"><a href="#">About Jikan API</a></li>
+                    <li class="list-inline-item"><a href="#">Anime & Manga</a></li>
+                    <li class="list-inline-item"><a href="#">Rankings</a></li>
+                    <li class="list-inline-item"><a href="#">Seasonal Lists</a></li>
+                </ul>
+            </div>
+        </div>
+    </body>
+    
+    
+    
+
+    
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+  </body>
+</html>
