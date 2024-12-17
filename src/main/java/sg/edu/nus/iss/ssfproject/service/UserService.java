@@ -179,6 +179,8 @@ public class UserService {
 
         // }
 
+        
+        
         finalRecommendedAnimeList = getRecommendedListFromGenreIds(favGenres, verifiedUser);
 
         }
@@ -203,8 +205,15 @@ public class UserService {
         //     System.out.println(anime.toString());
         // }
         // System.out.println(finalRecommendedAnimeList.size());
+        Set<String> excludedGenres = Set.of("ecchi", "boys love", "girls love");
 
-        return finalRecommendedAnimeList;
+        return finalRecommendedAnimeList.stream()
+    .filter(anime -> anime.getGenres() != null &&
+            anime.getGenres().stream()
+                .map(String::toLowerCase) // 
+                .noneMatch(excludedGenres::contains)) // Exclude if any genre matches
+    .collect(Collectors.toList());
+        // return finalRecommendedAnimeList;
     }
 
     private List<Anime> getRecommendedListFromGenreIds(List<String> genresList,User verifiedUser) throws JsonProcessingException {
@@ -232,7 +241,7 @@ public class UserService {
             // System.out.println(anime.toString());
             //want to ensure that the recommended list doesn't already contain the anime the user has already watched
             //get 10 recommendations max
-            if (!watchListAnime.contains(anime) && finalRecommendedAnimeList.size() < 10) {
+            if (!watchListAnime.contains(anime) && finalRecommendedAnimeList.size() < 15) {
                 finalRecommendedAnimeList.add(anime);
                 // userRepo.setHash(ConstantVar.usersRedisKey, , animeByDiffGenreIdsUrl);
             }

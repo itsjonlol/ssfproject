@@ -11,6 +11,11 @@
             background-color: #222;
             color: #fff;
         }
+        .anime-image {
+            display:flex;
+            align-items: flex-end;
+            height:100%;
+        }
 
         .anime-details-container {
             max-width: 900px;
@@ -21,15 +26,21 @@
         .anime-image img {
             width: 100%;
             border-radius: 10px;
+            max-height:100%;
+            object-fit:cover;
         }
 
         .anime-title {
-            font-size: 2.5rem;
+            font-size: 2.0rem;
             font-weight: bold;
+            line-height:1.0;
+            /* margin-bottom:10px; */
         }
 
         .anime-metadata {
-            margin-bottom: 20px;
+            margin-bottom: 0;
+            
+            line-height:1;
         }
 
         .anime-genres span {
@@ -39,6 +50,9 @@
             padding: 5px 10px;
             margin-right: 5px;
         }
+        .anime-details-container .row {
+    min-height: 400px; /* Set a baseline minimum height */
+}
 
         .anime-synopsis {
             line-height: 1.6;
@@ -59,6 +73,12 @@
 
         .info-section ul li {
             list-style-type: disc;
+        }
+        .col-md-8 {
+            display:flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding-top:10px;
         }
         .custom-navbar {
         background-color: peachpuff;
@@ -111,12 +131,12 @@
         </div>
     </nav> -->
     
-    <div class="anime-details-container">
+    <div class="anime-details-container m-auto">
         <div class="row">
-            <div class="col-md-4 anime-image">
+            <div class="col-md-4 anime-image d-flex">
                 <img th:src="@{${anime.large_image_url}}" alt="Anime Cover">
             </div>
-            <div class="col-md-8"><!-- if null then unknown-->
+            <div class="col-md-8 d-flex flex-column justify-content-between"><!-- if null then unknown-->
                 <div class="anime-title" th:text="${anime.title}">Anime Title</div>
                 <div class="anime-metadata">
                     <p th:text="'Japanese Title: ' + (${anime.title_japanese} ?: 'Unknown')">Japanese Title</p>
