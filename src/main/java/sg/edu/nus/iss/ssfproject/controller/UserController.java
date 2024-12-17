@@ -45,7 +45,7 @@ public class UserController {
         }
        
 
-        return "view2B";
+        return "view2C";
     }
 
     @GetMapping("/addanime/{animeid}")
@@ -59,7 +59,7 @@ public class UserController {
         //required to login before adding to wishlist
         if (session.getAttribute("verifieduser") == null) {
             model.addAttribute("errorMessage","Please login first before adding to watchlist");
-            return "view2B";
+            return "view2C";
         }
         //if logged in
         model.addAttribute("animeinwatchlist",userService.animeInUserWatchList(anime, verifiedUser));
@@ -78,7 +78,7 @@ public class UserController {
 
 
     
-        return "view2B";
+        return "view2C";
     }
     @GetMapping("/watchlist/{verifiedusername}")
     public String seeUserWatchList(@PathVariable("verifiedusername") String username,HttpSession session
