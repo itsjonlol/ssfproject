@@ -29,7 +29,7 @@ public class LoginController {
     public String getUserRegisterPage(Model model) {
         User user = new User();
         model.addAttribute("user",user);
-        return "register";
+        return "register2";
     }
 
     //add bindingresult and verification
@@ -42,7 +42,7 @@ public class LoginController {
     }
     @GetMapping("/login")
     public String getLoginPage() {
-        return "login";
+        return "login2";
     }
 
     @PostMapping("/login/verify")
@@ -53,12 +53,12 @@ public class LoginController {
         //check to see if username exists
         if (!loginUserService.checkIfUsernameExists(username)) {
             model.addAttribute("errorMessage","User account does not exist");
-            return "login";
+            return "login2";
         }
         //verify password if username exists
         if (!loginUserService.checkIfPasswordMatches(username, password)) {
             model.addAttribute("errorMessage","Invalid password");
-            return "login";
+            return "login2";
         }
         User verifiedUser = loginUserService.getVerfiedUser(username);
         session.setAttribute("verifieduser",verifiedUser);
