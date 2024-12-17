@@ -205,15 +205,15 @@ public class UserService {
         //     System.out.println(anime.toString());
         // }
         // System.out.println(finalRecommendedAnimeList.size());
-        Set<String> excludedGenres = Set.of("ecchi", "boys love", "girls love");
+    //     Set<String> excludedGenres = Set.of("ecchi", "boys love", "girls love");
 
-        return finalRecommendedAnimeList.stream()
-    .filter(anime -> anime.getGenres() != null &&
-            anime.getGenres().stream()
-                .map(String::toLowerCase) // 
-                .noneMatch(excludedGenres::contains)) // Exclude if any genre matches
-    .collect(Collectors.toList());
-        // return finalRecommendedAnimeList;
+    //     return finalRecommendedAnimeList.stream()
+    // .filter(anime -> anime.getGenres() != null &&
+    //         anime.getGenres().stream()
+    //             .map(String::toLowerCase) // 
+    //             .noneMatch(excludedGenres::contains)) // Exclude if any genre matches
+    // .collect(Collectors.toList());
+        return finalRecommendedAnimeList;
     }
 
     private List<Anime> getRecommendedListFromGenreIds(List<String> genresList,User verifiedUser) throws JsonProcessingException {
@@ -222,7 +222,7 @@ public class UserService {
             System.out.println("Users genre: " + genre);
             String genreId = animeRepo.getValueFromHash(ConstantVar.genresRedisKey,genre);
             genreIdsList.add(genreId);
-            System.out.println("random genreid: " + genreId);
+            System.out.println("genreid: " + genreId);
 
         }
         List<Anime> finalRecommendedAnimeList = new ArrayList<>();

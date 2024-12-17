@@ -62,12 +62,15 @@ public class AnimeService {
         JsonReader reader = Json.createReader(is);
         JsonObject jsonObject = reader.readObject();
         JsonArray jArray = jsonObject.getJsonArray("data");
-
+        
         for (int i = 0; i < jArray.size(); i++) {
             JsonObject jObject = jArray.getJsonObject(i);
             String genreName = jObject.getString("name");
-            animeGenreMap.put(genreName, jObject.getInt("mal_id"));
-            animeRepo.setHash(ConstantVar.genresRedisKey, genreName, String.valueOf(jObject.getInt("mal_id")));
+            if (!genreName.toLowerCase().equals("boys love") && !genreName.toLowerCase().equals("girls love")) {
+                animeGenreMap.put(genreName, jObject.getInt("mal_id"));
+                animeRepo.setHash(ConstantVar.genresRedisKey, genreName, String.valueOf(jObject.getInt("mal_id")));
+            }
+            
         }
     }
     
