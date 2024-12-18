@@ -116,7 +116,7 @@ public class UserController {
         User verifiedUser = (User) session.getAttribute("verifieduser");
         model.addAttribute("verifieduser",verifiedUser);
 
-        if (verifiedUser == null) {
+        if (verifiedUser == null ||!verifiedUser.getUsername().toLowerCase().equals(username.toLowerCase())) {
             return "invalidusererror";
         } // if someone tries to go to the watchlist being logged in
         List<Anime> verifiedUserWatchList = verifiedUser.getWatchListAnime();

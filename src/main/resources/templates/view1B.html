@@ -114,6 +114,13 @@
         <button class="btn custom-btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>
     <div th:if="${errorMessage}" th:text="${errorMessage}"></div>
+    
+    <div th:if="${animelist == null}" class="text-center">
+        <p>No Anime searched yet...</p>
+    </div>
+    <div th:if="${noresults}" class="text-center">
+        <p>No Anime found...</p>
+    </div>
       
     <!-- <form action="/searchresult" method="POST">
         <input type="text" name="query" placeholder="Search for an anime...">
@@ -149,10 +156,8 @@
     </div>
     
 
-    <!-- No Anime Found Message -->
-    <div th:if="${animelist == null || animelist.size() == 0}" class="text-center">
-        <p>No Anime searched yet...</p>
-    </div>
+    
+    
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>

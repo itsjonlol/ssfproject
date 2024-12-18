@@ -89,11 +89,16 @@ public class AnimeController {
 
     @PostMapping("/searchresult")
     public String showAnime(@RequestParam String query,Model model,HttpSession session) {
+        
+        // model.addAttribute("noresults",false);
         if (!query.matches("^[a-zA-Z0-9].*")) {
-            model.addAttribute("errorMessage","Invalid input");
+            model.addAttribute("errorMessage","Invalid input. Please start with an alphanumeric character");
             return "view1B";
         }
         List<Anime> animeListByQuery = animeService.getAnimeListByQuery(query);
+        if (animeListByQuery.isEmpty()) {
+            model.addAttribute("noresults",true);
+        }
        
         model.addAttribute("animelist",animeListByQuery);
         User verifiedUser = (User) session.getAttribute("verifieduser");
