@@ -76,7 +76,10 @@ public class LoginController {
         User verifiedUser = loginUserService.getVerfiedUser(username);
         session.setAttribute("verifieduser",verifiedUser);
         //add session
-        return "redirect:/";
+        String redirectUrl = (String) session.getAttribute("redirectUrl");
+        session.removeAttribute("redirectUrl"); // Clean up after redirect
+        return "redirect:" + (redirectUrl != null ? redirectUrl : "/");
+        // return "redirect:/";
     }
 
     @GetMapping("/logout")

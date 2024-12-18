@@ -43,7 +43,7 @@ public class UserController {
             model.addAttribute("animeinwatchlist",animeInWatchList);
 
         }
-       
+        session.setAttribute("redirectUrl", "/"+id);
 
         return "view2C";
     }
@@ -59,6 +59,7 @@ public class UserController {
         //required to login before adding to wishlist
         if (session.getAttribute("verifieduser") == null) {
             model.addAttribute("errorMessage","Please login first before adding to watchlist");
+            session.setAttribute("redirectUrl", "/"+id);
             return "view2C";
         }
         //if logged in

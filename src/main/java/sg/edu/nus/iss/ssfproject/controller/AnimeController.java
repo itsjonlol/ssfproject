@@ -28,6 +28,7 @@ public class AnimeController {
     public String getLanding(Model model,HttpSession session) {
         User verifiedUser = (User) session.getAttribute("verifieduser");
         model.addAttribute("verifieduser",verifiedUser);
+        session.setAttribute("redirectUrl", "/landing");
         return "landing";
     }
     
@@ -47,6 +48,7 @@ public class AnimeController {
         List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);
         model.addAttribute("animelist",animeListByGenre);
         model.addAttribute("selectedgenre",genre);
+        session.setAttribute("redirectUrl", "/");
         return "view0";
     }
      @PostMapping("/filter")
@@ -78,7 +80,7 @@ public class AnimeController {
         model.addAttribute("selectedgenre",genre);
         System.out.println(genre);
         
-
+        session.setAttribute("redirectUrl", "/filter/"+ genre);
         return "view0"; //cannot redirect here because it will go back to the original
     }
 
@@ -86,6 +88,7 @@ public class AnimeController {
     public String showSearchPage(Model model,HttpSession session) {
         User verifiedUser = (User) session.getAttribute("verifieduser");
         model.addAttribute("verifieduser",verifiedUser);
+        session.setAttribute("redirectUrl", "/search");
         return "view1B";
     }
 
