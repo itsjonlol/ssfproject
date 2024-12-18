@@ -6,110 +6,113 @@
     <title>Anime List</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
-       body {
-    background-color: #050520; /* Deep dark blue */
-    color: #e6f1ff; /* Soft pale blue text */
-}
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            
+            
+            /* padding-top: 50px; */
+        }
 
-.anime-card {
-    /* background-color: #112240; Slightly lighter blue-gray */
-    color: #e6f1ff;
-    border-radius: 10px;
-    overflow: hidden;
-    transition: transform 0.3s, box-shadow 0.3s;
-    box-shadow: 0 4px 6px rgba(2, 12, 27, 0.7); /* Subtle shadow */
-}
+        .anime-card {
+            /* background-color: #343a40; */
+            color: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            transition:  0.3s;
+        }
 
-.anime-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 16px rgba(2, 12, 27, 0.9); /* Elevated shadow on hover */
-    background-image: linear-gradient(135deg, #926aff 0%, #ff77b0 50%, #ffb367 100%);
-}
 
-.anime-image {
-    width: 100%;
-    height: 280px;
-    object-fit: cover;
-}
+        .anime-card:hover {
+            transform: scale(1.1);
+            z-index: 2;
+        }
 
-.anime-title {
-    padding: 5px;
-    font-weight: bold;
-    font-size: 0.9rem;
-    color: #ccd6f6; /* Slightly softer blue */
-}
+        .anime-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+        }
 
-.custom-dropdown-btn {
-    background-image: linear-gradient(135deg, #926aff 0%, #ff77b0 50%, #ffb367 100%);/* Medium steel blue */
-    color: #e6f1ff;
-    border: 1px solid #486581; /* Soft gray-blue border */
-    font-weight: bold;
-}
+        .anime-title {
+            padding: 5px;
+            /* text-align: center; */
+            font-weight: bold;
+            font-size: 0.9rem;
+            /* overflow: hidden; */
+            /* white-space: nowrap; */
+            /* text-overflow: ellipsis; */
+        }
+        .custom-dropdown-btn {
+            background-color: peachpuff;
+            color:black;
+            font-weight:bold;
+        }
+        .custom-dropdown-btn:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
 
-.custom-dropdown-btn:hover {
-    background-color: #3a506b; /* Darker steel blue */
-    color: #ffffff;
-}
+        /* Focused or active state */
+        .btn:focus, .btn:active {
+            background-color: purple; /* Gold color when active */
+            color: white;
+            border-color: white;
+        }
+        .dropdown-menu {
+        border-radius: 10px; /* Rounded corners */
+        background-color: #121212;
+    }
 
-.btn:focus, .btn:active {
-    background-color: #64ffda; /* Bright teal for focus */
-    color: #0a192f;
-    border-color: #64ffda;
-}
+    .dropdown-item {
+        color: white; /* Dark text */
+    }
 
-.dropdown-menu {
-    background-color: #112240;
-    border: 1px solid #233554;
-    border-radius: 10px;
-}
+    .dropdown-item:hover {
+        background-color: gray; /* Green background on hover */
+        color: white;
+    }
 
-.dropdown-item {
-    color: #e6f1ff;
-}
+    .dropdown-item.active {
+        background-color: purple; /* Blue for active items */
+        color: white;
+    }
+     
+        .filter-menu {
+            margin-bottom: 20px;
+        }
 
-.dropdown-item:hover {
-    background-color: #233554;
-    color: #ffffff;
-}
 
-.dropdown-item.active {
-    background-image: linear-gradient(135deg, #926aff 0%, #ff77b0 50%, #ffb367 100%); /* Teal for active state */
-    color: #0a192f;
-}
+        .filter-container {
+            margin-bottom: 20px;
+        }
 
-footer {
-    background-color: #080823; /* Matches the theme */
-    color: #ccd6f6;
-    padding: 20px 0;
-    text-align: center;
-    /* border-top: 1px solid #233554; */
-    /* border: 1px solid;
-    border-image: linear-gradient(135deg, #926aff 0%, #ff77b0 50%, #ffb367 100%);
-    border-image-slice: 1;  */
-}
+        .filter-label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
 
+        
+
+        footer {
+    background-color: peachpuff; /* Dark background for contrast */
+    color: black; /* White text */
+    padding: 20px 0; /* Padding for spacing */
+}
 .custom-navbar {
-    background-color: #080823;
-    color: #e6f1ff;
-    font-weight: bold;
-    /* border-bottom: 1px solid #233554; */
-    border-bottom: 1px solid;
-    border-image: linear-gradient(135deg, #926aff 0%, #ff77b0 50%, #ffb367 100%);
-    border-image-slice: 1; /* Ensures full gradient coverage */
-}
+        background-color: peachpuff;
+        /* background: linear-gradient(to bottom, #6a1b9a, #000000); Purple to Black Gradient */
+        color: black; /* Text color */
+        font-weight:bold;
+        
+    }
 
-.custom-navbar .navbar-nav .nav-link {
-    color: #ccd6f6;
-}
+    .custom-navbar .navbar-nav .nav-link {
+        color: black; /* White color for navbar links */
+    }
 
-.custom-navbar .navbar-nav .nav-link:hover {
-    background-image: linear-gradient(135deg, #926aff 0%, #ff77b0 50%, #ffb367 100%); /* Teal highlight */
-}
-
-
-
-
-
+    .custom-navbar .navbar-nav .nav-link:hover {
+        color: white /* Change color on hover */
+    }
 
 
 
@@ -171,10 +174,10 @@ footer {
    
     
     <div class="container mt-5">
-        <h1 class="text-center mb-4" style="color:#ccd6f6;">Top Anime</h1>
+        <h1 class="text-center mb-4">Top Anime</h1>
 
 
-        <div class="dropdown filter-menu mb-4">
+        <div class="dropdown filter-menu">
             <button class="btn custom-dropdown-btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                 <span th:text="${selectedgenre}">Select Genre</span> <!-- Default text -->
             </button>
@@ -205,17 +208,16 @@ footer {
             <small class = "text-white-50">All rights reserved</small>
         </div>
     </footer> -->
-    <hr>
     <div class="container">
-        <footer class="d-flex justify-content-between align-items-center py-3 my-4">
+        <footer class="d-flex justify-content-between align-items-center py-3 my-4 border-top">
             <!-- Left Side: Website Name -->
              
-            <div >
+            <div class="text-muted" >
                 AnimeWorld
             </div>
     
             <!-- Middle: Powered By -->
-            <div class="d-flex align-items-center text-center">
+            <div class="text-muted d-flex align-items-center text-center">
                 Powered by <a href="https://jikan.moe" target="_blank" class="text-decoration-none">Jikan API</a>
             </div>
 
@@ -224,7 +226,7 @@ footer {
             <!-- Right Side: GitHub Icon -->
             <div>
                 <a href="https://github.com/itsjonlol/ssfproject" target="_blank" class="text-muted text-decoration-none">
-                    <img src="/images/github-mark-white.png" width="24" height="24">
+                    <img src="/images/github-mark.svg" width="24" height="24">
                     
                 </a>
                 
