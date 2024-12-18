@@ -22,6 +22,7 @@ body {
     height: 100vh;
     overflow: hidden; /* Keeps the page from scrolling */
     margin: 0;
+    color:white;
 }
 
 .hero-section {
@@ -63,13 +64,21 @@ body {
 .hero-text p {
     font-size: 1.25rem;
 }
+.site-links ul li a {
+    color: white;
+    font-size: 1.25rem; 
+    text-decoration: none;
+}
 
-.site-links {
+.site-links ul li a:hover {
+    text-decoration: underline;
+}
+/* .site-links {
     position: absolute;
-    bottom: 100px; /* Adjust this value to move the links up */
+    bottom: 100px; 
     left: 50%;
     transform: translateX(-50%);
-    z-index: 3; /* Ensure links are above the overlay */
+    z-index: 3; 
 }
 
 .site-links ul {
@@ -85,20 +94,22 @@ body {
 
 .site-links ul li a {
     color: white;
-    font-size: 1.25rem;  /* Font size for links */
+    font-size: 1.25rem; 
     text-decoration: none;
 }
 
 .site-links ul li a:hover {
     text-decoration: underline;
-}
+} */
+
+
 
 
 
 
 
     .custom-navbar {
-        background-color: rgba(0,0,0,0.5);
+        background-color: rgba(0, 0, 0, 0.1);
         /* background: linear-gradient(to bottom, #6a1b9a, #000000); Purple to Black Gradient */
         color: white; /* Text color */
         font-weight:bold;
@@ -125,8 +136,27 @@ body {
     
     <body>
         <div th:replace="~{navbar :: navbar}"></div>
-    
-        <div class="container-fluid hero-section">
+        <div class="container">
+            <div class="hero-text position-absolute top-45 start-50 translate-middle">
+                <h1> Explore,Experience,Enjoy Anime</h1>
+            </div>
+            <div class="site-links fixed-bottom mb-5">
+                <ul class="list-inline text-center d-flex flex-wrap justify-content-center gap-5">
+                    <li class="list-inline-item"><a href="#">About Jikan API</a></li>
+                    <li class="list-inline-item"><a href="#">View Top Anime</a></li>
+                    <li class="list-inline-item"><a href="#">Search Anime</a></li>
+                    <li class="list-inline-item"><a href="#">Login</a></li>
+                    <li class="list-inline-item">
+                        <a href="#">
+                            Github
+                            <img class ="mb-2"src="/images/github-mark-white.png" width="24" height="24">
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <!-- <div class="container-fluid hero-section">
             <div class="overlay"></div>
             <div class="hero-text">
                 <h1>Explore, Discover, Enjoy Anime</h1>
@@ -140,7 +170,7 @@ body {
                     <li class="list-inline-item"><a href="#">Seasonal Lists</a></li>
                 </ul>
             </div>
-        </div>
+        </div> -->
     </body>
     
     
