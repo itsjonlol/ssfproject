@@ -26,8 +26,12 @@ public class LoginController {
     LoginUserService loginUserService;
     
     @GetMapping("/register")
-    public String getUserRegisterPage(Model model) {
+    public String getUserRegisterPage(Model model,HttpSession session) {
         User user = new User();
+        model.addAttribute("verifieduser",session.getAttribute("verifieduser"));
+        if (session.getAttribute("verifieduser")!= null) {
+            return "redirect:/";
+        }
         model.addAttribute("user",user);
         return "register2";
     }
@@ -54,7 +58,11 @@ public class LoginController {
         return "redirect:/";
     }
     @GetMapping("/login")
-    public String getLoginPage() {
+    public String getLoginPage(HttpSession session,Model model) {
+        model.addAttribute("verifieduser",session.getAttribute("verifieduser"));
+        if (session.getAttribute("verifieduser")!= null) {
+            return "redirect:/";
+        }
         return "login2";
     }
 
