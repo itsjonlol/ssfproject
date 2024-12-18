@@ -7,10 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.client.RestClientException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 import jakarta.servlet.http.HttpSession;
 import sg.edu.nus.iss.ssfproject.models.Anime;
@@ -30,14 +28,14 @@ public class UserController {
 
     @GetMapping("/{animeid}")
     public String showIndividualAnimePage(@PathVariable("animeid") String id, Model model,
-    HttpSession session) {
+    HttpSession session) throws Exception {
         User verifiedUser = (User) session.getAttribute("verifieduser");
         model.addAttribute("verifieduser",verifiedUser);
         try {
             Anime anime = animeService.getAnimeById(id);
-            if (anime == null) {
-                throw new RestClientException("Unable to fetch anime details");
-            }
+            // if (anime == null) {
+            //     throw new RestClientException("Unable to fetch anime details");
+            // }
             model.addAttribute("anime",anime);
             Boolean animeInWatchList;
             if (verifiedUser == null) {
@@ -49,8 +47,9 @@ public class UserController {
 
             }
             session.setAttribute("redirectUrl", "/"+id);
-        } catch (RestClientException e) {
-            model.addAttribute("error",e.getMessage());
+        } catch (Exception e) {
+            // model.addAttribute("error",e.getMessage());
+            return "error"; // so dont need to add null...
         }
         
         
@@ -60,7 +59,7 @@ public class UserController {
 
     @GetMapping("/addanime/{animeid}")
     public String addAnimeToWatchList(@PathVariable("animeid") String id,HttpSession session
-    ,Model model) throws JsonMappingException, JsonProcessingException {
+    ,Model model) throws Exception {
         Anime anime = animeService.getAnimeById(id); // can probably cache it
         model.addAttribute("anime",anime);
         User verifiedUser = (User) session.getAttribute("verifieduser");
@@ -144,7 +143,7 @@ public class UserController {
 
     @GetMapping("/deleteanime/{animeid}")
     public String deleteAnimeInWatchList(@PathVariable("animeid") String id,HttpSession session
-    ,Model model) throws JsonMappingException, JsonProcessingException {
+    ,Model model) throws Exception {
         Anime anime = animeService.getAnimeById(id); 
         
         User verifiedUser = (User) session.getAttribute("verifieduser");

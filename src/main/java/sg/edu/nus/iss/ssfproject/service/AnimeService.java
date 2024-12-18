@@ -340,7 +340,7 @@ public class AnimeService {
         }
         return animeList;
     }
-    public Anime getAnimeById(String id)  {
+    public Anime getAnimeById(String id) throws Exception  {
         String animeByIdUrl = String.format(Url.animeById,id);
         try {
             ResponseEntity<String> data = restTemplate.getForEntity(animeByIdUrl, String.class);
@@ -356,8 +356,8 @@ public class AnimeService {
 
         } catch (RestClientException ex) {
             System.out.println("error");
-            
-            return null;
+            throw new Exception("cant get anime details");
+            // return null;
         }
         
 
