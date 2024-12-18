@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import jakarta.servlet.http.HttpSession;
 import sg.edu.nus.iss.ssfproject.models.Anime;
 import sg.edu.nus.iss.ssfproject.models.User;
@@ -33,7 +35,7 @@ public class AnimeController {
     
     @GetMapping("/")
     public String topAnimeByGenre(@RequestParam(required=false,name = "genre",defaultValue="Slice of Life") String genre,
-     Model model,HttpSession session) {
+     Model model,HttpSession session) throws JsonProcessingException {
         User verifiedUser = (User) session.getAttribute("verifieduser");
         model.addAttribute("verifieduser",verifiedUser);
         List<String> animeGenres = animeService.getAnimeGenres();
@@ -49,7 +51,7 @@ public class AnimeController {
     }
      @PostMapping("/filter")
     public String filterTaskByStatus(@RequestParam(required=false,name="genre",defaultValue="Slice of Life") String genre
-    ,Model model,HttpSession session)  {
+    ,Model model,HttpSession session) throws JsonProcessingException  {
 
         User verifiedUser = (User) session.getAttribute("verifieduser");
         model.addAttribute("verifieduser",verifiedUser);
@@ -65,7 +67,7 @@ public class AnimeController {
     }
     @GetMapping("/filter/{genrename}")
     public String filterTaskByGenre(@PathVariable("genrename") String genre
-    ,Model model,HttpSession session)  {
+    ,Model model,HttpSession session) throws JsonProcessingException  {
 
         User verifiedUser = (User) session.getAttribute("verifieduser");
         model.addAttribute("verifieduser",verifiedUser);

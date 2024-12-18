@@ -14,11 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
-import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
-import jakarta.json.JsonObjectBuilder;
 import jakarta.json.JsonReader;
 import sg.edu.nus.iss.ssfproject.constant.ConstantVar;
 import sg.edu.nus.iss.ssfproject.constant.Url;
@@ -32,8 +34,8 @@ public class AnimeService {
     @Autowired
     AnimeRepo animeRepo;
 
-    // @Autowired
-    // private ObjectMapper objectMapper;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     Map<String,Integer> animeGenreMap;
 
@@ -88,7 +90,7 @@ public class AnimeService {
 
     }
 
-    public List<Anime> getAnimeListByGenre(String genre)  {
+    public List<Anime> getAnimeListByGenre(String genre) throws JsonProcessingException  {
         List<Anime> animeListByGenre = new ArrayList<>();
         // String genreId = String.valueOf(animeGenreMap.get(genre));
         String genreId = animeRepo.getValueFromHash(ConstantVar.genresRedisKey, genre);
@@ -127,29 +129,29 @@ public class AnimeService {
     // private List<String> producers;
     // private List<String> studios;
     // private List<String> genres;
-    public void saveAnimeByGenre(Anime anime,String category) {
+    public void saveAnimeByGenre(Anime anime,String category) throws JsonProcessingException {
 
-        // String animeJsonString = objectMapper.writeValueAsString(anime);
+        String animeJsonString = objectMapper.writeValueAsString(anime);
 
-        // Store the serialized anime in Redis under the category
-        // animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonString);
+       //Store the serialized anime in Redis under the category
+        animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonString);
         
-        JsonObjectBuilder builder = Json.createObjectBuilder();
+//         JsonObjectBuilder builder = Json.createObjectBuilder();
 
-builder.add("mal_id", anime.getMal_id() != null ? anime.getMal_id() : null);
-builder.add("large_image_url", anime.getLarge_image_url() != null ? anime.getLarge_image_url() : null);
-builder.add("title", anime.getTitle() != null ? anime.getTitle() : null);
-JsonArrayBuilder genreArrayBuilder = Json.createArrayBuilder();
+// builder.add("mal_id", anime.getMal_id() != null ? anime.getMal_id() : null);
+// builder.add("large_image_url", anime.getLarge_image_url() != null ? anime.getLarge_image_url() : null);
+// builder.add("title", anime.getTitle() != null ? anime.getTitle() : null);
+// JsonArrayBuilder genreArrayBuilder = Json.createArrayBuilder();
 
 
-List<String> genres = anime.getGenres();
-if (genres !=null && !genres.isEmpty()) {
-    for (String genre : genres) {
-        genreArrayBuilder.add(genre);
-    }
-}
-//build first
-JsonArray genreArray = genreArrayBuilder.build();
+// List<String> genres = anime.getGenres();
+// if (genres !=null && !genres.isEmpty()) {
+//     for (String genre : genres) {
+//         genreArrayBuilder.add(genre);
+//     }
+// }
+// //build first
+// JsonArray genreArray = genreArrayBuilder.build();
 // Handle lists
 // JsonArrayBuilder producerArrayBuilder = Json.createArrayBuilder();
 // if (anime.getProducers() != null && !anime.getProducers().isEmpty()) {
@@ -182,11 +184,13 @@ JsonArray genreArray = genreArrayBuilder.build();
 // builder.add("genres", genreArrayBuilder.build());
 
 // Finally build the JsonObject
-JsonObject animeJsonObject = builder
-                            .add("genres",genreArray)
-                            .build();
-animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonObject.toString()); // doesnt matter put here or savelist func
 
+////
+// JsonObject animeJsonObject = builder
+//                             .add("genres",genreArray)
+//                             .build();
+// animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonObject.toString()); // doesnt matter put here or savelist func
+///
         // JsonArrayBuilder producerBuilder = Json.createArrayBuilder();
         // JsonArrayBuilder studioBuilder = Json.createArrayBuilder();
         // JsonArrayBuilder genreBuilder = Json.createArrayBuilder();
@@ -271,37 +275,43 @@ animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonObject.t
 
     
 
-    public List<Anime> getCachedAnimesByGenre(String genre) {
+    public List<Anime> getCachedAnimesByGenre(String genre) throws JsonMappingException, JsonProcessingException {
         List<Object> objectList = animeRepo.getAllValuesFromHash(genre);
         List<Anime> animes = new ArrayList<>();
 
+
         for (Object data : objectList) {
-            String dataJsonString = (String) data;
-            InputStream is = new ByteArrayInputStream(dataJsonString.getBytes());
-            JsonReader reader = Json.createReader(is);
-            JsonObject dataJson = reader.readObject();
-            Anime anime = new Anime();
-
-            Integer mal_id = dataJson.getInt("mal_id");
-            String large_image_url = dataJson.getString("large_image_url");
-            String title = dataJson.getString("title");
-            // List<String> genres = new ArrayList<>();
-            // JsonArray genreJsonArray = dataJson.getJsonArray("genres");
-
-            // for (int i = 0; i<genreJsonArray.size();i++) {
-            //     JsonObject individualGenreJsonObject = genreJsonArray.getJsonObject(i);
-            //     String genreName = individualGenreJsonObject.getString("name");
-            //     genres.add(genreName);
-
-            // }
-
-            anime.setMal_id(mal_id);
-            anime.setLarge_image_url(large_image_url);
-            anime.setTitle(title);
-            // anime.setGenres(genres);
+            String animeDataJsonString = (String) data;
+            Anime anime = objectMapper.readValue(animeDataJsonString, Anime.class);
             animes.add(anime);
-            
         }
+        // for (Object data : objectList) {
+        //     String dataJsonString = (String) data;
+        //     InputStream is = new ByteArrayInputStream(dataJsonString.getBytes());
+        //     JsonReader reader = Json.createReader(is);
+        //     JsonObject dataJson = reader.readObject();
+        //     Anime anime = new Anime();
+
+        //     Integer mal_id = dataJson.getInt("mal_id");
+        //     String large_image_url = dataJson.getString("large_image_url");
+        //     String title = dataJson.getString("title");
+        //     // List<String> genres = new ArrayList<>();
+        //     // JsonArray genreJsonArray = dataJson.getJsonArray("genres");
+
+        //     // for (int i = 0; i<genreJsonArray.size();i++) {
+        //     //     JsonObject individualGenreJsonObject = genreJsonArray.getJsonObject(i);
+        //     //     String genreName = individualGenreJsonObject.getString("name");
+        //     //     genres.add(genreName);
+
+        //     // }
+
+        //     anime.setMal_id(mal_id);
+        //     anime.setLarge_image_url(large_image_url);
+        //     anime.setTitle(title);
+        //     // anime.setGenres(genres);
+        //     animes.add(anime);
+            
+        // }
         return animes;
     
     }
