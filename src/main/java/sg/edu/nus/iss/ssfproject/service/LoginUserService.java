@@ -1,5 +1,8 @@
 package sg.edu.nus.iss.ssfproject.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,6 +43,32 @@ public class LoginUserService {
     public Boolean checkIfUsernameExists(String username) {
         System.out.println(username.trim().toLowerCase());
         return userRepo.hasKey(ConstantVar.usersRedisKey, username.trim().toLowerCase());
+
+    }
+    public Boolean checkIfEmailExists(String email) throws JsonMappingException, JsonProcessingException {
+        
+        List<User> users = this.getUsers();
+        
+        for (User user : users) {
+            if (email.toLowerCase().equals(user.getEmail().toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+    public List<User> getUsers() throws JsonMappingException, JsonProcessingException {
+        List<Object> objects = userRepo.getAllValuesFromHash(ConstantVar.usersRedisKey);
+
+        List<User> users = new ArrayList<>();
+
+        for (Object object : objects) {
+            String userJsonString = (String) object;
+            User user = objectMapper.readValue(userJsonString, User.class);
+            users.add(user);
+        }
+
+        return users;
 
     }
 

@@ -36,6 +36,19 @@ public class LoginController {
     @PostMapping("/register/verify")
     public String verifyUserRegistration(@Valid @ModelAttribute("user") User user,BindingResult result,
     Model model) throws JsonProcessingException {
+        if (result.hasErrors()) {
+            return "register2";
+        }
+        if (loginUserService.checkIfUsernameExists(user.getUsername())) {
+            model.addAttribute("errorMessage","User account already exists.");
+            return "register2";
+        }
+
+        if (loginUserService.checkIfEmailExists(user.getEmail())) {
+            model.addAttribute("errorMessage","Email already exists.");
+            return "register2";
+
+        }
         
         loginUserService.register(user);
         return "redirect:/";
