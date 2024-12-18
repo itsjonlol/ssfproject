@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<style>
+    body {
+        background-color: #0a192f; /* Deep dark blue */
+        color: #e6f1ff; /* Soft pale blue text */
+    }
+    
+    
+    footer {
+        background-color: #080823; /* Matches the theme */
+        color: #ccd6f6;
+        padding: 20px 0;
+        text-align: center;
+        /* border-top: 1px solid #233554; */
+        /* border: 1px solid;
+        border-image: linear-gradient(135deg, #926aff 0%, #ff77b0 50%, #ffb367 100%);
+        border-image-slice: 1;  */
+    }
+    
+    .custom-navbar {
+        /* background-color: #080823; */
+        background-color: #0a192f;
+        /* background-color: #64ffda; */
+        color:black;
+        /* color: #e6f1ff; */
+        font-weight: bold;
+        /* border-bottom: 1px solid #233554; */
+        border-bottom: 1px solid #64ffda;
+        /* border-image: linear-gradient(135deg, #926aff 0%, #ff77b0 50%, #ffb367 100%);
+        border-image-slice: 1; Ensures full gradient coverage */
+    }
+    
+    .custom-navbar .navbar-nav .nav-link {
+        color: #ccd6f6;
+        /* color:black; */
+    }
+    
+    .custom-navbar .navbar-nav .nav-link:hover {
+        /* background-image: linear-gradient(135deg, #926aff 0%, #ff77b0 50%, #ffb367 100%); Teal highlight */
+        background-color: #64ffda;
+        color:black;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        </style>
+</head>
+<body>
+    <div th:replace="~{navbar :: navbar}"></div>
+    <h1>Invalid User. Please login here or go back to main page.</h1>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+</body>
+</html>

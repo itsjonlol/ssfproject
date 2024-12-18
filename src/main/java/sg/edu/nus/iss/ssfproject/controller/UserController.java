@@ -84,15 +84,23 @@ public class UserController {
     public String seeUserWatchList(@PathVariable("verifiedusername") String username,HttpSession session
     ,Model model) {
 
+        User verifiedUser = (User) session.getAttribute("verifieduser");
+        model.addAttribute("verifieduser",verifiedUser);
+
+        if (verifiedUser == null ||!verifiedUser.getUsername().toLowerCase().equals(username.toLowerCase())) {
+            return "invalidusererror";
+        } // if someone tries to go to the watchlist being logged in
+
+        List<Anime> verifiedUserWatchList = verifiedUser.getWatchListAnime();
+        
         //need restcontroller to see someone else's watchlist..?
 
         //need to account for other's watchlist
         model.addAttribute("torecommend",true);
         //for the case of verified user seeing his watchlist
-        User verifiedUser = (User) session.getAttribute("verifieduser");
-        List<Anime> verifiedUserWatchList = verifiedUser.getWatchListAnime();
+        
         model.addAttribute("watchlist",verifiedUserWatchList);
-        model.addAttribute("verifieduser",verifiedUser);
+        
 
         return "watchlist";
     }
@@ -106,9 +114,15 @@ public class UserController {
 
         //for the case of verified user seeing his watchlist
         User verifiedUser = (User) session.getAttribute("verifieduser");
-        List<Anime> verifiedUserWatchList = verifiedUser.getWatchListAnime();
-        model.addAttribute("watchlist",verifiedUserWatchList);
         model.addAttribute("verifieduser",verifiedUser);
+
+        if (verifiedUser == null) {
+            return "invalidusererror";
+        } // if someone tries to go to the watchlist being logged in
+        List<Anime> verifiedUserWatchList = verifiedUser.getWatchListAnime();
+
+        model.addAttribute("watchlist",verifiedUserWatchList);
+        
         List<Anime> recommendedAnimeList = userService.recommendAnimeForUser(verifiedUser);
         model.addAttribute("recommendedlist",recommendedAnimeList);
         model.addAttribute("torecommend",true);
