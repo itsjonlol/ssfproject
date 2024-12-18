@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.client.RestClientException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -32,18 +33,27 @@ public class UserController {
     HttpSession session) {
         User verifiedUser = (User) session.getAttribute("verifieduser");
         model.addAttribute("verifieduser",verifiedUser);
-        Anime anime = animeService.getAnimeById(id);
-        model.addAttribute("anime",anime);
-        Boolean animeInWatchList;
-        if (verifiedUser == null) {
-            animeInWatchList = false;
-            model.addAttribute("animeinwatchlist",animeInWatchList);
-        } else {
-            animeInWatchList = userService.animeInUserWatchList(anime, verifiedUser);
-            model.addAttribute("animeinwatchlist",animeInWatchList);
+        try {
+            Anime anime = animeService.getAnimeById(id);
+            if (anime == null) {
+                throw new RestClientException("Unable to fetch anime details");
+            }
+            model.addAttribute("anime",anime);
+            Boolean animeInWatchList;
+            if (verifiedUser == null) {
+                animeInWatchList = false;
+                model.addAttribute("animeinwatchlist",animeInWatchList);
+            } else {
+                animeInWatchList = userService.animeInUserWatchList(anime, verifiedUser);
+                model.addAttribute("animeinwatchlist",animeInWatchList);
 
+            }
+            session.setAttribute("redirectUrl", "/"+id);
+        } catch (RestClientException e) {
+            model.addAttribute("error",e.getMessage());
         }
-        session.setAttribute("redirectUrl", "/"+id);
+        
+        
 
         return "view2C";
     }

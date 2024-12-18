@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -339,18 +340,26 @@ public class AnimeService {
         }
         return animeList;
     }
-    public Anime getAnimeById(String id) {
+    public Anime getAnimeById(String id)  {
         String animeByIdUrl = String.format(Url.animeById,id);
-        ResponseEntity<String> data = restTemplate.getForEntity(animeByIdUrl, String.class);
-        String payload = data.getBody();
-        
-        InputStream is = new ByteArrayInputStream(payload.getBytes());
-        JsonReader reader = Json.createReader(is);
-        JsonObject jsonObject = reader.readObject();
-        JsonObject jObject = jsonObject.getJsonObject("data");
+        try {
+            ResponseEntity<String> data = restTemplate.getForEntity(animeByIdUrl, String.class);
+            String payload = data.getBody();
+            
+            InputStream is = new ByteArrayInputStream(payload.getBytes());
+            JsonReader reader = Json.createReader(is);
+            JsonObject jsonObject = reader.readObject();
+            JsonObject jObject = jsonObject.getJsonObject("data");
 
-        Anime anime = AnimeUtil.parseJsonObject(jObject);
-        return anime;
+            Anime anime = AnimeUtil.parseJsonObject(jObject);
+            return anime;
+
+        } catch (RestClientException ex) {
+            System.out.println("error");
+            
+            return null;
+        }
+        
 
     }
 
