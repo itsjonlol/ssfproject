@@ -25,12 +25,11 @@
 </style>
 <body>
     <div th:fragment="navbar">
-        <nav class="navbar custom-navbar navbar-expand-lg">
+        <nav class="navbar custom-navbar navbar-expand-lg p-0">
             <div class="container-fluid">
-                <!-- Logo and Name in the same container, placed on the left -->
                 <a class="navbar-brand d-flex" href="#">
-                    <span>Anime Finder</span>
-                    
+                    <!-- <span>Anime Finder</span> -->
+                    <img th:src="@{/images/logo2.png}" width="75px" height="auto">
     
                 </a>
                 <span th:if="${verifieduser != null} "  th:text="'Hello,' + ${verifieduser.username}" class="nav-item"></span>

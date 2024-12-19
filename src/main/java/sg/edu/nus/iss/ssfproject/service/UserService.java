@@ -99,7 +99,7 @@ public class UserService {
 
 
     //recommends anime based on user's watchlist
-    public List<Anime> recommendAnimeForUser(User verifiedUser) throws JsonProcessingException {
+    public List<Anime> recommendAnimeForUser(User verifiedUser) throws Exception {
 
         // List<Anime> recommendedAnimeList = verifiedUser.getWatchListAnime();
 
@@ -216,7 +216,7 @@ public class UserService {
         return finalRecommendedAnimeList;
     }
 
-    private List<Anime> getRecommendedListFromGenreIds(List<String> genresList,User verifiedUser) throws JsonProcessingException {
+    private List<Anime> getRecommendedListFromGenreIds(List<String> genresList,User verifiedUser) throws Exception {
         List<String> genreIdsList = new ArrayList<>();
         for ( String genre : genresList) {
             System.out.println("Users genre: " + genre);

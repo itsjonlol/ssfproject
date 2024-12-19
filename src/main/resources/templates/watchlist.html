@@ -12,25 +12,33 @@
 </head>
 <body>
     <style>
-    body {
-        background-color: #121212;
-        color: #ffffff;
-    }
+     body {
+    background-color: #0a192f; /* Deep dark blue */
+    color: #ccd6f6; /* Soft pale blue text */
+}
     .custom-navbar {
-        background-color: gray;
-        /* background: linear-gradient(to bottom, #6a1b9a, #000000); Purple to Black Gradient */
-        color: black; /* Text color */
-        font-weight:bold;
-        
-    }
+    /* background-color: #080823; */
+    background-color: #0a192f;
+    /* background-color: #64ffda; */
+    color: #ccd6f6;
+    /* color: #e6f1ff; */
+    font-weight: bold;
+    /* border-bottom: 1px solid #233554; */
+    border-bottom: 1px solid #64ffda;
+    /* border-image: linear-gradient(135deg, #926aff 0%, #ff77b0 50%, #ffb367 100%);
+    border-image-slice: 1; Ensures full gradient coverage */
+}
 
-    .custom-navbar .navbar-nav .nav-link {
-        color: black; /* White color for navbar links */
-    }
+.custom-navbar .navbar-nav .nav-link {
+    color: #ccd6f6;
+    /* color:black; */
+}
 
-    .custom-navbar .navbar-nav .nav-link:hover {
-        color: white /* Change color on hover */
-    }
+.custom-navbar .navbar-nav .nav-link:hover {
+    /* background-image: linear-gradient(135deg, #926aff 0%, #ff77b0 50%, #ffb367 100%); Teal highlight */
+    background-color: #64ffda;
+    color:black;
+}
     .swiper {
     width: 100%;
     margin: 20px auto;
@@ -67,7 +75,19 @@
     font-weight: bold;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Optional: adds shadow to text */
 }
+.custom-list-group {
+    background-color:#0a192f;
+    color: #ccd6f6; 
+    /* color:black; */
+}
 
+.custom-btn {
+            /* background-image: linear-gradient(135deg, #926aff 0%, #ff77b0 50%, #ffb367 100%); */
+            /* color:#ccd6f6; */
+            background-color: #64ffda;
+            color:black;
+            font-weight:bold;
+        }
 
     
     </style>
@@ -80,7 +100,7 @@
 
     <div th:if="${torecommend}" class="container">
         <h1 >My recommended list</h1>
-        <a th:href="@{/watchlist/recommend/{verifiedusername}(verifiedusername = ${verifieduser.username})}">Recommend Anime for me</a>
+        <a class = "btn custom-btn btn-outline-success my-2 my-sm-0" th:href="@{/watchlist/recommend/{verifiedusername}(verifiedusername = ${verifieduser.username})}">Recommend Anime for me</a>
     <div class="swiper mySwiper" >
         <div class="swiper-wrapper">
             
@@ -129,16 +149,16 @@
 
     <div class="container">
         <h1 >My Watchlist</h1>
-        <div class="list-group list-group-flush">
-            <div class="list-group-item d-flex align-items-center bg-black" th:each="anime : ${watchlist}">
+        <div class="list-group list-group-flush ">
+            <div class="list-group-item d-flex align-items-center custom-list-group" th:each="anime : ${watchlist}">
                 <!-- Anime Image -->
                 <img th:src="${anime.large_image_url}" alt="Anime Image" class="img-fluid rounded me-3" style="width: 100px; height: auto;">
                 
                 <!-- Anime Title and Rank -->
-                <div class="me-auto"> 
-                    <a th:href="@{'/' + ${anime.mal_id}}" th:text="${anime.title}" class="fw-bold text-decoration-none text-white"></a>
+                <div class="custom-list-group me-auto"> 
+                    <a th:href="@{'/' + ${anime.mal_id}}" th:text="${anime.title}" class="fw-bold text-decoration-none custom-list-group "></a>
 
-                    <p class="mb-0 text-white">Rank: <span th:text="${anime.rank}"></span></p>
+                    <p class="mb-0">Rank: <span th:text="${anime.rank}"></span></p>
                 </div>
                 <a class = "btn btn-danger" th:href="@{'/deleteanime/' + ${anime.mal_id}}">Delete</a>
                 

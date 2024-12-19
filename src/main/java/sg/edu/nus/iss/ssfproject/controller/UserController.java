@@ -8,8 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import jakarta.servlet.http.HttpSession;
 import sg.edu.nus.iss.ssfproject.models.Anime;
 import sg.edu.nus.iss.ssfproject.models.User;
@@ -48,7 +46,7 @@ public class UserController {
             }
             session.setAttribute("redirectUrl", "/"+id);
         } catch (Exception e) {
-            // model.addAttribute("error",e.getMessage());
+            model.addAttribute("error",e.getMessage());
             return "error"; // so dont need to add null...
         }
         
@@ -116,7 +114,7 @@ public class UserController {
     }
     @GetMapping("/watchlist/recommend/{verifiedusername}")
     public String getRecommendedAnime(@PathVariable("verifiedusername") String username,HttpSession session
-    ,Model model) throws JsonProcessingException {
+    ,Model model) throws Exception {
 
         //need restcontroller to see someone else's watchlist..?
 
