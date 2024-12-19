@@ -22,17 +22,17 @@ public class AnimeController {
     @Autowired
     AnimeService animeService;
     
-    @GetMapping("/landing")
+    @GetMapping("/")
     public String getLanding(Model model,HttpSession session) {
         User verifiedUser = (User) session.getAttribute("verifieduser");
         model.addAttribute("verifieduser",verifiedUser);
-        session.setAttribute("redirectUrl", "/landing");
+        session.setAttribute("redirectUrl", "/");
         return "landing";
     }
     
     
     
-    @GetMapping("/")
+    @GetMapping("/topanimes")
     public String topAnimeByGenre(@RequestParam(required=false,name = "genre",defaultValue="Slice of Life") String genre,
      Model model,HttpSession session) throws Exception {
         User verifiedUser = (User) session.getAttribute("verifieduser");
@@ -52,7 +52,7 @@ public class AnimeController {
             return "error";
         }
         
-        session.setAttribute("redirectUrl", "/");
+        session.setAttribute("redirectUrl", "/topanimes");
         return "view0";
     }
      @PostMapping("/filter")
