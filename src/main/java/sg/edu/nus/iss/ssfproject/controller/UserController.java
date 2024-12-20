@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import jakarta.servlet.http.HttpSession;
 import sg.edu.nus.iss.ssfproject.models.Anime;
 import sg.edu.nus.iss.ssfproject.models.User;
@@ -29,11 +31,15 @@ public class UserController {
     HttpSession session) throws Exception {
         User verifiedUser = (User) session.getAttribute("verifieduser");
         model.addAttribute("verifieduser",verifiedUser);
-        try {
+        // try {
             Anime anime = animeService.getAnimeById(id);
             // if (anime == null) {
             //     throw new RestClientException("Unable to fetch anime details");
             // }
+            //should api call fail
+            if (anime.getTitle().equals("apierror")) {
+                return "error";
+            }
             model.addAttribute("anime",anime);
             Boolean animeInWatchList;
             if (verifiedUser == null) {
@@ -45,10 +51,10 @@ public class UserController {
 
             }
             session.setAttribute("redirectUrl", "/"+id);
-        } catch (Exception e) {
-            model.addAttribute("error",e.getMessage());
-            return "error"; // so dont need to add null...
-        }
+        // } catch (Exception e) {
+        //     // model.addAttribute("error",e.getMessage());
+        //     return "error"; // so dont need to add null...
+        // }
         
         
 
@@ -114,7 +120,7 @@ public class UserController {
     }
     @GetMapping("/watchlist/recommend/{verifiedusername}")
     public String getRecommendedAnime(@PathVariable("verifiedusername") String username,HttpSession session
-    ,Model model) throws Exception {
+    ,Model model) throws JsonProcessingException {
 
         //need restcontroller to see someone else's watchlist..?
 
@@ -128,10 +134,25 @@ public class UserController {
             return "invalidusererror";
         } // if someone tries to go to the watchlist being logged in
         List<Anime> verifiedUserWatchList = verifiedUser.getWatchListAnime();
+        
 
         model.addAttribute("watchlist",verifiedUserWatchList);
         
         List<Anime> recommendedAnimeList = userService.recommendAnimeForUser(verifiedUser);
+        //for api error cases
+        if (!recommendedAnimeList.isEmpty()) {
+            if (recommendedAnimeList.getFirst().getTitle().equals("apierror") ) {
+                return "error";
+            }
+        }
+        
+        if (recommendedAnimeList.isEmpty()) {
+            model.addAttribute("errorMessage","Unable to retrive recommended anime list at the moment.");
+            
+        }
+        
+        
+        
         model.addAttribute("recommendedlist",recommendedAnimeList);
         model.addAttribute("torecommend",true);
         

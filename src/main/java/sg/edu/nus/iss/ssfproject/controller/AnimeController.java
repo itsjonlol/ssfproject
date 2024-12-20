@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import jakarta.servlet.http.HttpSession;
 import sg.edu.nus.iss.ssfproject.models.Anime;
 import sg.edu.nus.iss.ssfproject.models.User;
@@ -34,67 +36,64 @@ public class AnimeController {
     
     @GetMapping("/topanimes")
     public String topAnimeByGenre(@RequestParam(required=false,name = "genre",defaultValue="Slice of Life") String genre,
-     Model model,HttpSession session) throws Exception {
+     Model model,HttpSession session) throws JsonProcessingException {
         User verifiedUser = (User) session.getAttribute("verifieduser");
         model.addAttribute("verifieduser",verifiedUser);
-        try {
-            List<String> animeGenres = animeService.getAnimeGenres();
-            model.addAttribute("animegenres",animeGenres);
-            
-            // if (genre ==null) {
-            //     genre = "Slice of Life"; // default value
-            // }
-            List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);
-            model.addAttribute("animelist",animeListByGenre);
-            model.addAttribute("selectedgenre",genre);
-            
-        } catch (Exception e) {
-            return "error";
-        }
+        List<String> animeGenres = animeService.getAnimeGenres();
         
+        model.addAttribute("animegenres",animeGenres);
+        
+        // if (genre ==null) {
+        //     genre = "Slice of Life"; // default value
+        // }
+        //for api error cases
+        List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);
+        if (!animeListByGenre.isEmpty()) {
+            if ( animeListByGenre.getFirst().getTitle().equals("apierror") ) {
+                return "error";
+            }
+        }
+        model.addAttribute("animelist",animeListByGenre);
+        model.addAttribute("selectedgenre",genre);
         session.setAttribute("redirectUrl", "/topanimes");
         return "view0";
     }
-     @PostMapping("/filter")
-    public String filterTaskByStatus(@RequestParam(required=false,name="genre",defaultValue="Slice of Life") String genre
-    ,Model model,HttpSession session) throws Exception  {
+    //  @PostMapping("/filter")
+    // public String filterTaskByStatus(@RequestParam(required=false,name="genre",defaultValue="Slice of Life") String genre
+    // ,Model model,HttpSession session) throws JsonProcessingException  {
 
-        User verifiedUser = (User) session.getAttribute("verifieduser");
-        model.addAttribute("verifieduser",verifiedUser);
-        try {
-            List<String> animeGenres = animeService.getAnimeGenres();
-            model.addAttribute("animegenres",animeGenres);
-            List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);
-            model.addAttribute("animelist",animeListByGenre);
-            model.addAttribute("selectedgenre",genre);
-            System.out.println(genre);
+    //     User verifiedUser = (User) session.getAttribute("verifieduser");
+    //     model.addAttribute("verifieduser",verifiedUser);
+    //     List<String> animeGenres = animeService.getAnimeGenres();
+    //     model.addAttribute("animegenres",animeGenres);
+    //     List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);
+    //     model.addAttribute("animelist",animeListByGenre);
+    //     model.addAttribute("selectedgenre",genre);
+    //     System.out.println(genre);
         
 
-            return "view0"; //cannot redirect here because it will go back to the original
-
-        } catch (Exception e) {
-            return "error";
-        }
-        
-    }
+    //     return "view0"; //cannot redirect here because it will go back to the original
+    // }
     @GetMapping("/filter/{genrename}")
     public String filterTaskByGenre(@PathVariable("genrename") String genre
-    ,Model model,HttpSession session) throws Exception  {
+    ,Model model,HttpSession session) throws JsonProcessingException  {
 
         User verifiedUser = (User) session.getAttribute("verifieduser");
         model.addAttribute("verifieduser",verifiedUser);
-        try {
-            List<String> animeGenres = animeService.getAnimeGenres();
-            model.addAttribute("animegenres",animeGenres);
-            List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);
-            model.addAttribute("animelist",animeListByGenre);
-            model.addAttribute("selectedgenre",genre);
-            System.out.println(genre);
-            
-        } catch (Exception e) {
-            return "error";
+        List<String> animeGenres = animeService.getAnimeGenres();
+        model.addAttribute("animegenres",animeGenres);
+
+        //for api error cases
+        List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);
+        if (!animeListByGenre.isEmpty()) {
+            if ( animeListByGenre.getFirst().getTitle().equals("apierror") ) {
+                return "error";
+            }
         }
         
+        model.addAttribute("animelist",animeListByGenre);
+        model.addAttribute("selectedgenre",genre);
+        System.out.println(genre);
         
         session.setAttribute("redirectUrl", "/filter/"+ genre);
         return "view0"; //cannot redirect here because it will go back to the original
@@ -109,26 +108,28 @@ public class AnimeController {
     }
 
     @PostMapping("/searchresult")
-    public String showAnime(@RequestParam String query,Model model,HttpSession session) throws Exception {
+    public String showAnime(@RequestParam String query,Model model,HttpSession session) {
         
         // model.addAttribute("noresults",false);
         if (!query.matches("^[a-zA-Z0-9].*")) {
             model.addAttribute("errorMessage","Invalid input. Please start with an alphanumeric character");
             return "view1B";
         }
-
-        try {
-            List<Anime> animeListByQuery = animeService.getAnimeListByQuery(query);
-            model.addAttribute("animelist",animeListByQuery);
-            User verifiedUser = (User) session.getAttribute("verifieduser");
-            model.addAttribute("verifieduser",verifiedUser);
-            if (animeListByQuery.isEmpty()) {
-                model.addAttribute("noresults",true);
+        List<Anime> animeListByQuery = animeService.getAnimeListByQuery(query);
+        //for api error cases
+        if (!animeListByQuery.isEmpty()) {
+            if ( animeListByQuery.getFirst().getTitle().equals("apierror") ) {
+                return "error";
             }
-        } catch (Exception ex) {
-            return "error";
         }
-        
+        if (animeListByQuery.isEmpty()) {
+            model.addAttribute("noresults",true);
+        }
+       
+        model.addAttribute("animelist",animeListByQuery);
+        User verifiedUser = (User) session.getAttribute("verifieduser");
+        model.addAttribute("verifieduser",verifiedUser);
+
         return "view1B";
     }
 

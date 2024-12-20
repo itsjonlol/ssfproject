@@ -46,18 +46,13 @@ public class AnimeService {
         animeGenreMap = new HashMap<>();
         //get list of anime categories i want to show in my display page
         // List<String> animeGenres = this.getAnimeGenres();
-        try {
-            ResponseEntity<String> standardGenreData = restTemplate.getForEntity(Url.animeGenres+"?filter=genres", String.class);
         
-            ResponseEntity<String> demographicGenreData = restTemplate.getForEntity(Url.animeGenres+"?filter=demographics", String.class);
-            processGenreResponse(standardGenreData.getBody());
-            processGenreResponse(demographicGenreData.getBody());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ResponseEntity<String> standardGenreData = restTemplate.getForEntity(Url.animeGenres+"?filter=genres", String.class);
         
+        ResponseEntity<String> demographicGenreData = restTemplate.getForEntity(Url.animeGenres+"?filter=demographics", String.class);
         
-       
+        processGenreResponse(standardGenreData.getBody());
+        processGenreResponse(demographicGenreData.getBody());
         
         System.out.println(animeGenreMap.size());
         animeGenreMap.forEach((key, value) -> System.out.println(key + ":" + value));
@@ -96,7 +91,7 @@ public class AnimeService {
 
     }
 
-    public List<Anime> getAnimeListByGenre(String genre) throws Exception  {
+    public List<Anime> getAnimeListByGenre(String genre) throws JsonProcessingException  {
         List<Anime> animeListByGenre = new ArrayList<>();
         // String genreId = String.valueOf(animeGenreMap.get(genre));
         String genreId = animeRepo.getValueFromHash(ConstantVar.genresRedisKey, genre);
@@ -108,19 +103,20 @@ public class AnimeService {
             return animeListByGenre;
         }
         //cache miss-> store inside redis
-        try {
-            animeListByGenre = this.fetchAnimeApi(animeByGenreIdUrl);
+        animeListByGenre = this.fetchAnimeApi(animeByGenreIdUrl);
+        
+        //for api error
+        if (!animeListByGenre.isEmpty()) {
+            if ( animeListByGenre.getFirst().getTitle().equals("apierror") ) {
+                return animeListByGenre;
+            }
+        }
         
         for (Anime anime : animeListByGenre) {
             this.saveAnimeByGenre(anime,genre);
         }
         
         return animeListByGenre;
-
-        } catch (RestClientException ex) {
-            return null;
-        }
-        
     }
 
     // private Integer mal_id;
@@ -268,36 +264,27 @@ public class AnimeService {
         
     // }
 
-    public List<Anime> getAnimeListByQuery(String query) throws Exception {
+    public List<Anime> getAnimeListByQuery(String query) {
         
         System.out.println(query);
         String animeByQueryUrl = String.format(Url.animesByQuery,query);
-        try {
-            List<Anime> animeListByQuery = this.fetchAnimeApi(animeByQueryUrl);
+        List<Anime> animeListByQuery = this.fetchAnimeApi(animeByQueryUrl);
         Set<String> allowedTypes = Set.of("tv", "movie", "ova","ona","tv_special");
-        return animeListByQuery.stream()
-    .filter(anime -> anime.getType() != null && allowedTypes.contains(anime.getType().toLowerCase()))
-    .collect(Collectors.toList());
-
-        } catch (RestClientException ex) {
-            // ex.printStackTrace();
-            throw new Exception("Invalid API request");
+        //for api errors
+        if (!animeListByQuery.isEmpty()) {
+            if ( animeListByQuery.getFirst().getTitle().equals("apierror") ) {
+                return animeListByQuery;
+            }
         }
-        
-    
+
     // Filter the anime list to include only allowed types
         // return animeListByQuery.stream()
         //     .filter(anime -> allowedTypes.contains(anime.getType()))
         //     .collect(Collectors.toList());
         // 
-        
-        
-
-        
-        // return animeListByQuery;
-        
-        
-}
+        return animeListByQuery.stream()
+    .filter(anime -> anime.getType() != null && allowedTypes.contains(anime.getType().toLowerCase()))
+    .collect(Collectors.toList());}
         // return animeListByQuery;}
 
     
@@ -345,9 +332,8 @@ public class AnimeService {
         
     
 
-    public List<Anime> fetchAnimeApi(String url) throws Exception {
+    public List<Anime> fetchAnimeApi(String url) {
         List<Anime> animeList = new ArrayList<>();
-        
         try {
             ResponseEntity<String> data = restTemplate.getForEntity(url, String.class); 
             String payload = data.getBody();
@@ -356,25 +342,29 @@ public class AnimeService {
             JsonReader reader = Json.createReader(is);
             JsonObject jsonObject = reader.readObject();
             JsonArray jArray = jsonObject.getJsonArray("data");
-    
+
             for (int i = 0; i <jArray.size();i++) {
-    
+
                 JsonObject jObject = jArray.getJsonObject(i);
-    
+
                 Anime anime = AnimeUtil.parseJsonObject(jObject);
                 
                 animeList.add(anime);
             }
-            return animeList;
-            
         } catch (RestClientException ex) {
             System.out.println(ex.getMessage());
-            throw new Exception("Invalid API request");
+            Anime anime = new Anime();
+            anime.setTitle("apierror");
+            animeList.add(anime);
+            
+
         }
         
+        return animeList;
     }
-    public Anime getAnimeById(String id) throws Exception  {
+    public Anime getAnimeById(String id) {
         String animeByIdUrl = String.format(Url.animeById,id);
+        Anime anime = new Anime();
         try {
             ResponseEntity<String> data = restTemplate.getForEntity(animeByIdUrl, String.class);
             String payload = data.getBody();
@@ -383,15 +373,17 @@ public class AnimeService {
             JsonReader reader = Json.createReader(is);
             JsonObject jsonObject = reader.readObject();
             JsonObject jObject = jsonObject.getJsonObject("data");
-            System.out.println(" id is"+ id);
-            Anime anime = AnimeUtil.parseJsonObject(jObject);
-            return anime;
+
+            anime = AnimeUtil.parseJsonObject(jObject);
+            
 
         } catch (RestClientException ex) {
-            System.out.println("error");
-            throw new Exception("cant get anime details");
+            System.out.println("anime id service error " + ex.getMessage());
+            // throw new Exception("cant get anime details");
             // return null;
+            anime.setTitle("apierror");
         }
+        return anime;
         
 
     }
