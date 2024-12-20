@@ -47,6 +47,7 @@ public class AnimeService {
 
         //a map is required to map the anime genre name to its id.
         //not allowed to fetch anime of different categories via genre name. required to use genre id.
+         //map the anime category to its mal_id. so that i can call the api to get the top anime by its genre id
         animeGenreMap = new HashMap<>();
         
         //fetch the different anime genres to cater to most audiences
@@ -57,9 +58,6 @@ public class AnimeService {
         processGenreResponse(standardGenreData.getBody());
         processGenreResponse(demographicGenreData.getBody());
         
-        // System.out.println(animeGenreMap.size());
-        // animeGenreMap.forEach((key, value) -> System.out.println(key + ":" + value));
-        //map the anime category to its mal_id. so that i can call the api to get the top anime by its genre id
     }
     
     // Helper method to process the API response for the different genres
@@ -194,8 +192,6 @@ public class AnimeService {
             Anime anime = new Anime();
             anime.setTitle("apierror");
             animeList.add(anime);
-            
-
         }
         
         return animeList;
@@ -215,23 +211,16 @@ public class AnimeService {
 
             anime = AnimeUtil.parseJsonObject(jObject);
             
-
         } catch (RestClientException ex) {
             System.out.println("anime id service error " + ex.getMessage());
             
             anime.setTitle("apierror");
         }
         return anime;
-        
-
     }
 
     public Map<String, Integer> getAnimeGenreMap() {
         return animeGenreMap;
     }
 
-    
-    
-    
-    
 }

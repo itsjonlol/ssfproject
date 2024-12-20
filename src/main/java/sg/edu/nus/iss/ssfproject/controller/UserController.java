@@ -29,43 +29,45 @@ public class UserController {
     @GetMapping("/{animeid}")
     public String showIndividualAnimePage(@PathVariable("animeid") String id, Model model,
     HttpSession session) throws Exception {
+        //update nav bar to show whether a user is logged in
         User verifiedUser = (User) session.getAttribute("verifieduser");
         model.addAttribute("verifieduser",verifiedUser);
-        // try {
-            Anime anime = animeService.getAnimeById(id);
-            // if (anime == null) {
-            //     throw new RestClientException("Unable to fetch anime details");
-            // }
-            //should api call fail
-            if (anime.getTitle().equals("apierror")) {
-                return "error";
-            }
-            model.addAttribute("anime",anime);
-            Boolean animeInWatchList;
-            if (verifiedUser == null) {
-                animeInWatchList = false;
-                model.addAttribute("animeinwatchlist",animeInWatchList);
-            } else {
-                animeInWatchList = userService.animeInUserWatchList(anime, verifiedUser);
-                model.addAttribute("animeinwatchlist",animeInWatchList);
 
-            }
-            session.setAttribute("redirectUrl", "/"+id);
-        // } catch (Exception e) {
-        //     // model.addAttribute("error",e.getMessage());
-        //     return "error"; // so dont need to add null...
-        // }
+        //retrieve the anime to be displayed
+        Anime anime = animeService.getAnimeById(id);
         
-        
+        //should there be api errors
+        if (anime.getTitle().equals("apierror")) {
+            return "error";
+        }
 
+        model.addAttribute("anime",anime);
+        
+        //ensure it is "add to watchlist" if  a) no user is logged in and or b) not in user's watchlist
+        Boolean animeInWatchList;
+        if (verifiedUser == null) {
+            animeInWatchList = false;
+            model.addAttribute("animeinwatchlist",animeInWatchList);
+        } else {
+            animeInWatchList = userService.animeInUserWatchList(anime, verifiedUser);
+            model.addAttribute("animeinwatchlist",animeInWatchList);
+
+        }
+        //update url so that user can go back to this page post-login
+        session.setAttribute("redirectUrl", "/"+id);
+  
+    
         return "view2C";
     }
-
+    //function to add anime for a user
     @GetMapping("/addanime/{animeid}")
     public String addAnimeToWatchList(@PathVariable("animeid") String id,HttpSession session
     ,Model model) throws Exception {
-        Anime anime = animeService.getAnimeById(id); // can probably cache it
+        
+        //retrieve the anime to be displayed
+        Anime anime = animeService.getAnimeById(id); 
         model.addAttribute("anime",anime);
+        //update nav bar to show whether a user is logged in
         User verifiedUser = (User) session.getAttribute("verifieduser");
         model.addAttribute("verifieduser",verifiedUser);
         
@@ -75,43 +77,39 @@ public class UserController {
             session.setAttribute("redirectUrl", "/"+id);
             return "view2C";
         }
-        //if logged in
+        //if logged in. 
         model.addAttribute("animeinwatchlist",userService.animeInUserWatchList(anime, verifiedUser));
         
-        
+        //update to " added to watchlist " once user adds the anime into their watchlist / or is already added
         if (userService.animeInUserWatchList(anime, verifiedUser)) {
             model.addAttribute("animeinwatchlist", true);
         }
         userService.addAnimeToWatchList(anime,verifiedUser);
         model.addAttribute("animeinwatchlist", true);
         
-        //to change "add to watchlist button to added to watchlist"
-
-        // 1) is logged in
-        // 2) have the anime on its watchlist
-
+        
 
     
         return "view2C";
     }
+
     @GetMapping("/watchlist/{verifiedusername}")
     public String seeUserWatchList(@PathVariable("verifiedusername") String username,HttpSession session
     ,Model model) {
 
+        //update nav bar to show whether a user is logged in
         User verifiedUser = (User) session.getAttribute("verifieduser");
         model.addAttribute("verifieduser",verifiedUser);
 
+        // if one tries to go to another person's watchlist, reject them
         if (verifiedUser == null ||!verifiedUser.getUsername().toLowerCase().equals(username.toLowerCase())) {
             return "invalidusererror";
-        } // if someone tries to go to the watchlist being logged in
+        } 
 
+        //retrieve user's watchlist
         List<Anime> verifiedUserWatchList = verifiedUser.getWatchListAnime();
         
-        //need restcontroller to see someone else's watchlist..?
-
-        //need to account for other's watchlist
         model.addAttribute("torecommend",true);
-        //for the case of verified user seeing his watchlist
         
         model.addAttribute("watchlist",verifiedUserWatchList);
         
@@ -122,36 +120,34 @@ public class UserController {
     public String getRecommendedAnime(@PathVariable("verifiedusername") String username,HttpSession session
     ,Model model) throws JsonProcessingException {
 
-        //need restcontroller to see someone else's watchlist..?
-
-        //need to account for other's watchlist
-
+        
         //for the case of verified user seeing his watchlist
         User verifiedUser = (User) session.getAttribute("verifieduser");
         model.addAttribute("verifieduser",verifiedUser);
 
+         // if one tries to go to another person's watchlist, reject them
         if (verifiedUser == null ||!verifiedUser.getUsername().toLowerCase().equals(username.toLowerCase())) {
             return "invalidusererror";
-        } // if someone tries to go to the watchlist being logged in
+        } 
+        //retrieve user's watchlist
         List<Anime> verifiedUserWatchList = verifiedUser.getWatchListAnime();
         
-
         model.addAttribute("watchlist",verifiedUserWatchList);
         
+        //retrieve user's recommended watchlist
         List<Anime> recommendedAnimeList = userService.recommendAnimeForUser(verifiedUser);
+
         //for api error cases
         if (!recommendedAnimeList.isEmpty()) {
             if (recommendedAnimeList.getFirst().getTitle().equals("apierror") ) {
                 return "error";
             }
         }
-        
+        // if unable to retrieve recommended watchlist
         if (recommendedAnimeList.isEmpty()) {
             model.addAttribute("errorMessage","Unable to recommended anime list at the moment.");
             
         }
-        
-        
         
         model.addAttribute("recommendedlist",recommendedAnimeList);
         model.addAttribute("torecommend",true);
@@ -163,20 +159,21 @@ public class UserController {
     @GetMapping("/deleteanime/{animeid}")
     public String deleteAnimeInWatchList(@PathVariable("animeid") String id,HttpSession session
     ,Model model) throws Exception {
+
+        //retrieve anime based on its id
         Anime anime = animeService.getAnimeById(id); 
         
+        //retrieve the current user
         User verifiedUser = (User) session.getAttribute("verifieduser");
         model.addAttribute("verifieduser",verifiedUser);
+
+        //display current watchlist
         List<Anime> verifiedUserWatchList = verifiedUser.getWatchListAnime();
         model.addAttribute("watchlist",verifiedUserWatchList);
         
         userService.deleteAnimeInWatchList(anime, verifiedUser);
         model.addAttribute("torecommend",true);
         
-        
-
-
-    
         return "watchlist";
     }
 
