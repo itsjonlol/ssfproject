@@ -21,7 +21,8 @@ public class AnimeRepo {
     @Autowired
     @Qualifier(ConstantVar.template01)
     private RedisTemplate<String, String> template;
-    // to add more?
+    
+    //the anime genres to be shown in front page
     public List<String> animeGenres() {
         List<String> animeGenres = new ArrayList<>(Arrays.asList("Slice of Life",
                                                                         "Comedy",

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -43,10 +44,12 @@ public class AnimeService {
     RestTemplate restTemplate = new RestTemplate();
 
     public void getAnimeGenre() {
+
+        //a map is required to map the anime genre name to its id.
+        //not allowed to fetch anime of different categories via genre name. required to use genre id.
         animeGenreMap = new HashMap<>();
-        //get list of anime categories i want to show in my display page
-        // List<String> animeGenres = this.getAnimeGenres();
         
+        //fetch the different anime genres to cater to most audiences
         ResponseEntity<String> standardGenreData = restTemplate.getForEntity(Url.animeGenres+"?filter=genres", String.class);
         
         ResponseEntity<String> demographicGenreData = restTemplate.getForEntity(Url.animeGenres+"?filter=demographics", String.class);
@@ -54,12 +57,12 @@ public class AnimeService {
         processGenreResponse(standardGenreData.getBody());
         processGenreResponse(demographicGenreData.getBody());
         
-        System.out.println(animeGenreMap.size());
-        animeGenreMap.forEach((key, value) -> System.out.println(key + ":" + value));
+        // System.out.println(animeGenreMap.size());
+        // animeGenreMap.forEach((key, value) -> System.out.println(key + ":" + value));
         //map the anime category to its mal_id. so that i can call the api to get the top anime by its genre id
     }
     
-    // Helper method to process the API response
+    // Helper method to process the API response for the different genres
     private void processGenreResponse(String payload) {
         InputStream is = new ByteArrayInputStream(payload.getBytes());
         JsonReader reader = Json.createReader(is);
@@ -69,8 +72,10 @@ public class AnimeService {
         for (int i = 0; i < jArray.size(); i++) {
             JsonObject jObject = jArray.getJsonObject(i);
             String genreName = jObject.getString("name");
+            //additional genre filter, to cater to most audiences
             if (!genreName.toLowerCase().equals("boys love") && !genreName.toLowerCase().equals("girls love")) {
                 animeGenreMap.put(genreName, jObject.getInt("mal_id"));
+                //store the genre names with their respective id into redis
                 animeRepo.setHash(ConstantVar.genresRedisKey, genreName, String.valueOf(jObject.getInt("mal_id")));
             }
             
@@ -81,212 +86,42 @@ public class AnimeService {
         return animeRepo.hashExists(redisKey);
 
     }
-    
+    //get the list of genres to display in front page
     public List<String> getAnimeGenres() {
         return animeRepo.animeGenres();
     }
 
     
-
+    //get the list of anime for the selected genre
     public List<Anime> getAnimeListByGenre(String genre) throws JsonProcessingException  {
         List<Anime> animeListByGenre = new ArrayList<>();
         // String genreId = String.valueOf(animeGenreMap.get(genre));
         String genreId = animeRepo.getValueFromHash(ConstantVar.genresRedisKey, genre);
         
         String animeByGenreIdUrl = String.format(Url.animesByGenreId,genreId);
-        //cache hit to reduce load times
+        //cache hit to reduce load times. check to see if the genre exists in redis.
         if (animeRepo.hashExists(genre)) {
             animeListByGenre = this.getCachedAnimesByGenre(genre);
             return animeListByGenre;
         }
-        //cache miss-> store inside redis
+        //cache miss-> a) do an api call based on the genre.
         animeListByGenre = this.fetchAnimeApi(animeByGenreIdUrl);
         
-        //for api error
+        //to account for api error
         if (!animeListByGenre.isEmpty()) {
             if ( animeListByGenre.getFirst().getTitle().equals("apierror") ) {
                 return animeListByGenre;
             }
         }
-        
+        //b) store the list of anime for that genre into redis for caching purposes
         for (Anime anime : animeListByGenre) {
             this.saveAnimeByGenre(anime,genre);
         }
         
         return animeListByGenre;
     }
-
-    // private Integer mal_id;
-    // //which image
-    // private String large_image_url;
-
-    // // youtube trailer omit first
-    // private String title;
-    // private String title_japanese;
-    // private String type;
-    // private Integer episodes;
-    // private String status;
-    // private String duration;
-    // private Double score;
-    // private Integer rank;
-    // private String synopsis;
-    // private Integer year;
-    // private List<String> producers;
-    // private List<String> studios;
-    // private List<String> genres;
-    public void saveAnimeByGenre(Anime anime,String category) throws JsonProcessingException {
-
-        String animeJsonString = objectMapper.writeValueAsString(anime);
-
-       //Store the serialized anime in Redis under the category
-        animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonString);
-        
-//         JsonObjectBuilder builder = Json.createObjectBuilder();
-
-// builder.add("mal_id", anime.getMal_id() != null ? anime.getMal_id() : null);
-// builder.add("large_image_url", anime.getLarge_image_url() != null ? anime.getLarge_image_url() : null);
-// builder.add("title", anime.getTitle() != null ? anime.getTitle() : null);
-// JsonArrayBuilder genreArrayBuilder = Json.createArrayBuilder();
-
-
-// List<String> genres = anime.getGenres();
-// if (genres !=null && !genres.isEmpty()) {
-//     for (String genre : genres) {
-//         genreArrayBuilder.add(genre);
-//     }
-// }
-// //build first
-// JsonArray genreArray = genreArrayBuilder.build();
-// Handle lists
-// JsonArrayBuilder producerArrayBuilder = Json.createArrayBuilder();
-// if (anime.getProducers() != null && !anime.getProducers().isEmpty()) {
-//     for (String producer : anime.getProducers()) {
-//         producerArrayBuilder.add(Json.createObjectBuilder().add("name", producer));
-//     }
-// } else {
-//     producerArrayBuilder.add(JsonValue.NULL);
-// }
-// builder.add("producers", producerArrayBuilder.build());
-
-// JsonArrayBuilder studioArrayBuilder = Json.createArrayBuilder();
-// if (anime.getStudios() != null && !anime.getStudios().isEmpty()) {
-//     for (String studio : anime.getStudios()) {
-//         studioArrayBuilder.add(Json.createObjectBuilder().add("name", studio));
-//     }
-// } else {
-//     studioArrayBuilder.add(JsonValue.NULL);
-// }
-// builder.add("studios", studioArrayBuilder.build());
-
-// JsonArrayBuilder genreArrayBuilder = Json.createArrayBuilder();
-// if (anime.getGenres() != null && !anime.getGenres().isEmpty()) {
-//     for (String genre : anime.getGenres()) {
-//         genreArrayBuilder.add(Json.createObjectBuilder().add("name", genre));
-//     }
-// } else {
-//     genreArrayBuilder.add(JsonValue.NULL);
-// }
-// builder.add("genres", genreArrayBuilder.build());
-
-// Finally build the JsonObject
-
-////
-// JsonObject animeJsonObject = builder
-//                             .add("genres",genreArray)
-//                             .build();
-// animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonObject.toString()); // doesnt matter put here or savelist func
-///
-        // JsonArrayBuilder producerBuilder = Json.createArrayBuilder();
-        // JsonArrayBuilder studioBuilder = Json.createArrayBuilder();
-        // JsonArrayBuilder genreBuilder = Json.createArrayBuilder();
-        
-        // for (String producer : anime.getProducers()) {
-        //     JsonObject producerJsonObject = Json.createObjectBuilder()
-        //                                         .add("name",producer)
-        //                                         .build();
-        //     producerBuilder.add(producerJsonObject);
-        // }
-        // for (String studio : anime.getStudios()) {
-        //     JsonObject studioJsonObject = Json.createObjectBuilder()
-        //                                         .add("name",studio)
-        //                                         .build();
-        //     studioBuilder.add(studioJsonObject);
-        // }
-        // for (String genre : anime.getGenres()) {
-        //     JsonObject genreJsonObject = Json.createObjectBuilder()
-        //                                         .add("name",genre)
-        //                                         .build();
-        //     genreBuilder.add(genreJsonObject);
-        // }
-        
-        // JsonObject animeJsonObject = Json.createObjectBuilder()
-        //                                  .add("mal_id",anime.getMal_id())
-        //                                  .add("large_image_url",anime.getLarge_image_url())
-        //                                  .add("title",anime.getTitle())
-        //                                  .add("title_japanese",anime.getTitle_japanese())
-        //                                  .add("type",anime.getType())
-        //                                  .add("episodes",anime.getEpisodes())
-        //                                  .add("status",anime.getStatus())
-        //                                  .add("duration",anime.getDuration())
-        //                                  .add("score",anime.getScore())
-        //                                  .add("rank",anime.getRank())
-        //                                  .add("synopsis",anime.getSynopsis())
-        //                                  .add("year",anime.getYear())
-        //                                  .add("producers",producerBuilder.build())
-        //                                  .add("studios",studioBuilder.build())
-        //                                  .add("genres",genreBuilder.build())
-        //                                  .build();
-        // animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonObject.toString());
-
-    }
-
-    // public void saveArticles2(List<News> savedArticles) {
-        
-    //     for (News news : savedArticles) {
-    //         JsonObject newsJsonObject = Json.createObjectBuilder()
-    //                                         .add("id",news.getId())
-    //                                         .add("published",news.getPublished())
-    //                                         .add("title",news.getTitle())
-    //                                         .add("url",news.getUrl())
-    //                                         .add("imageurl",news.getImageUrl())
-    //                                         .add("body",news.getBody())
-    //                                         .add("tags",news.getTags())
-    //                                         .add("categories",news.getCategories())
-    //                                         .build();
-    //         //if update, it will just autoupdate
-    //         newsRepo.setHash(ConstantVar.redisKey, news.getId(), newsJsonObject.toString());                                 
-
-    //     }
-        
-        
-    // }
-
-    public List<Anime> getAnimeListByQuery(String query) {
-        
-        System.out.println(query);
-        String animeByQueryUrl = String.format(Url.animesByQuery,query);
-        List<Anime> animeListByQuery = this.fetchAnimeApi(animeByQueryUrl);
-        Set<String> allowedTypes = Set.of("tv", "movie", "ova","ona","tv_special");
-        //for api errors
-        if (!animeListByQuery.isEmpty()) {
-            if ( animeListByQuery.getFirst().getTitle().equals("apierror") ) {
-                return animeListByQuery;
-            }
-        }
-
-    // Filter the anime list to include only allowed types
-        // return animeListByQuery.stream()
-        //     .filter(anime -> allowedTypes.contains(anime.getType()))
-        //     .collect(Collectors.toList());
-        // 
-        return animeListByQuery.stream()
-    .filter(anime -> anime.getType() != null && allowedTypes.contains(anime.getType().toLowerCase()))
-    .collect(Collectors.toList());}
-        // return animeListByQuery;}
-
-    
-
-    public List<Anime> getCachedAnimesByGenre(String genre) throws JsonMappingException, JsonProcessingException {
+    //helper method to retrieve the cached list of anime for a particular genre
+    private List<Anime> getCachedAnimesByGenre(String genre) throws JsonMappingException, JsonProcessingException {
         List<Object> objectList = animeRepo.getAllValuesFromHash(genre);
         List<Anime> animes = new ArrayList<>();
 
@@ -296,39 +131,44 @@ public class AnimeService {
             Anime anime = objectMapper.readValue(animeDataJsonString, Anime.class);
             animes.add(anime);
         }
-        // for (Object data : objectList) {
-        //     String dataJsonString = (String) data;
-        //     InputStream is = new ByteArrayInputStream(dataJsonString.getBytes());
-        //     JsonReader reader = Json.createReader(is);
-        //     JsonObject dataJson = reader.readObject();
-        //     Anime anime = new Anime();
-
-        //     Integer mal_id = dataJson.getInt("mal_id");
-        //     String large_image_url = dataJson.getString("large_image_url");
-        //     String title = dataJson.getString("title");
-        //     // List<String> genres = new ArrayList<>();
-        //     // JsonArray genreJsonArray = dataJson.getJsonArray("genres");
-
-        //     // for (int i = 0; i<genreJsonArray.size();i++) {
-        //     //     JsonObject individualGenreJsonObject = genreJsonArray.getJsonObject(i);
-        //     //     String genreName = individualGenreJsonObject.getString("name");
-        //     //     genres.add(genreName);
-
-        //     // }
-
-        //     anime.setMal_id(mal_id);
-        //     anime.setLarge_image_url(large_image_url);
-        //     anime.setTitle(title);
-        //     // anime.setGenres(genres);
-        //     animes.add(anime);
-            
-        // }
+        
         return animes;
     
     }
-        
-    
 
+    //helper function to save an Anime from a list of a particular genre.
+    private void saveAnimeByGenre(Anime anime,String category) throws JsonProcessingException {
+
+        //automapping -> convert anime object into an json-formatted string
+        String animeJsonString = objectMapper.writeValueAsString(anime);
+
+       //Store an anime object into redis. this is to build a list of anime for that genre into redis.
+        animeRepo.setHash(category, String.valueOf(anime.getMal_id()), animeJsonString);
+        
+    }
+    //function to return a list of anime based on what user searched in the front page.
+    public List<Anime> getAnimeListByQuery(String query) {
+        
+        System.out.println(query);
+        String animeByQueryUrl = String.format(Url.animesByQuery,query);
+        List<Anime> animeListByQuery = this.fetchAnimeApi(animeByQueryUrl);
+        //filter the type of anime able to be searched.
+        // Set<String> allowedTypes = Set.of("tv", "movie", "ova","ona","tv_special");
+        Set<String> allowedAnimeTypes = Stream.of("TV", "MOVIE", "OVA", "ONA","TV_SPECIAL")
+        .collect(Collectors.toUnmodifiableSet());
+        //for api errors
+        if (!animeListByQuery.isEmpty()) {
+            if ( animeListByQuery.getFirst().getTitle().equals("apierror") ) {
+                return animeListByQuery;
+            }
+        }
+
+        return animeListByQuery.stream()
+    .filter(anime -> anime.getType() != null && allowedAnimeTypes.contains(anime.getType().toUpperCase()))
+    .collect(Collectors.toList());
+}
+        
+    //generic helper function to fetch an api based on a specific url. returns a list of anime from that url.
     public List<Anime> fetchAnimeApi(String url) {
         List<Anime> animeList = new ArrayList<>();
         try {
@@ -348,6 +188,7 @@ public class AnimeService {
                 
                 animeList.add(anime);
             }
+            // in case of any api errors
         } catch (RestClientException ex) {
             System.out.println(ex.getMessage());
             Anime anime = new Anime();
@@ -359,6 +200,7 @@ public class AnimeService {
         
         return animeList;
     }
+    //function to retrieve anime details when a user clicks on an anime card profile.
     public Anime getAnimeById(String id) {
         String animeByIdUrl = String.format(Url.animeById,id);
         Anime anime = new Anime();
@@ -376,8 +218,7 @@ public class AnimeService {
 
         } catch (RestClientException ex) {
             System.out.println("anime id service error " + ex.getMessage());
-            // throw new Exception("cant get anime details");
-            // return null;
+            
             anime.setTitle("apierror");
         }
         return anime;

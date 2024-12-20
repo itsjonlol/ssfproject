@@ -8,6 +8,7 @@ import jakarta.json.JsonObject;
 import sg.edu.nus.iss.ssfproject.models.Anime;
 
 public class AnimeUtil {
+    //parse the json from an api call to construct an anime object.
     public static  Anime parseJsonObject(JsonObject jObject) {
 
         Anime anime = new Anime();
@@ -18,9 +19,10 @@ public class AnimeUtil {
 // } else {
 //     episodes = jObject.getInt("episodes");
 // }
-        Integer mal_id = jObject.getInt("mal_id");
-        String large_image_url = jObject.getJsonObject("images").getJsonObject("webp").getString("large_image_url");
-        String title = jObject.getString("title");
+        //put null values for each attribute if it is null
+        Integer mal_id = jObject.getInt("mal_id"); // anime will always have a mal_id
+        String large_image_url = jObject.getJsonObject("images").getJsonObject("webp").getString("large_image_url",null);
+        String title = jObject.getString("title",null);
         String title_japanese = jObject.getString("title_japanese", null); // Handle null values
         String type = jObject.getString("type", null);
         Integer episodes = jObject.isNull("episodes") ? null : jObject.getInt("episodes");
@@ -31,9 +33,12 @@ public class AnimeUtil {
         String synopsis = jObject.getString("synopsis", null);
         Integer year = jObject.isNull("year") ? null : jObject.getInt("year");
 
-        JsonArray producerArray = jObject.getJsonArray("producers");
-        JsonArray studioArray = jObject.getJsonArray("studios");
-        JsonArray genreArray = jObject.getJsonArray("genres");
+        JsonArray producerArray = jObject.isNull("producers") ? null : jObject.getJsonArray("producers");
+        // JsonArray producerArray = jObject.getJsonArray("producers");
+        // JsonArray studioArray = jObject.getJsonArray("studios");
+        JsonArray studioArray = jObject.isNull("studios") ? null : jObject.getJsonArray("studios");
+        JsonArray genreArray = jObject.isNull("genres") ? null : jObject.getJsonArray("genres");
+        // JsonArray genreArray = jObject.getJsonArray("genres");
 
         List<String> producers = new ArrayList<>();
         List<String> studios = new ArrayList<>();

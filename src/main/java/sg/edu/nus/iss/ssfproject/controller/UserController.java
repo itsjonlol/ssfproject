@@ -147,7 +147,7 @@ public class UserController {
         }
         
         if (recommendedAnimeList.isEmpty()) {
-            model.addAttribute("errorMessage","Unable to retrive recommended anime list at the moment.");
+            model.addAttribute("errorMessage","Unable to recommended anime list at the moment.");
             
         }
         

@@ -76,7 +76,10 @@
                     <p th:text="'Type: ' + (${anime.type} ?: 'Unknown')">Type</p>
                     <p th:text="'Rank: #' + (${anime.rank} ?: 'Unknown')">Rank</p>
                     <p th:text="'Score: ' + (${anime.score} ?: 'Unknown')">Score</p>
-                    <p th:text="'Aired: ' + (${anime.year} ?: 'Unknown')">Aired</p>
+                    
+                    <p th:if="${anime.year !=null}" th:text="'Aired: ' + ${anime.year}"></p>
+                    <p th:if="${anime.year == null}">Aired: Unknown</p>
+                    <!-- <p th:text="'Aired: ' + (${anime.year} ?: 'Unknown')">Aired</p> -->
                 </div>
                 <div class="anime-genres d-flex flex-wrap gap-2 mb-4">
                     <span class="custom-badge badge  rounded-pill " th:each="genre : ${anime.genres}" th:text="${genre} ?: 'Unknown'">Genre</span>
