@@ -31,11 +31,12 @@ public class LoginUserService {
 
         //store an encrypted version of user's password for security
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        // TODO Auto-generated method stub
+        
+        //make User object into a Json String format
         String userJsonString = objectMapper.writeValueAsString(user);
         
         
-        // Store the serialized user in Redis under the category
+        // Store the User in json-string format into redis
         
         userRepo.setHash(ConstantVar.usersRedisKey,user.getUsername().trim().toLowerCase(), userJsonString);
     }
@@ -64,6 +65,7 @@ public class LoginUserService {
 
         for (Object object : objects) {
             String userJsonString = (String) object;
+            //convert userjsonstring to user object
             User user = objectMapper.readValue(userJsonString, User.class);
             users.add(user);
         }
@@ -73,7 +75,9 @@ public class LoginUserService {
     }
 
     public Boolean checkIfPasswordMatches(String username, String password) throws JsonProcessingException {
+        
         String userJsonString = userRepo.getValueFromHash(ConstantVar.usersRedisKey,username.trim().toLowerCase());
+
         User user = objectMapper.readValue(userJsonString, User.class);
 
         // Verify the password

@@ -24,28 +24,28 @@
     }
     
     .custom-navbar {
-        /* background-color: #080823; */
-        background-color: #0a192f;
-        /* background-color: #64ffda; */
-        color:black;
-        /* color: #e6f1ff; */
-        font-weight: bold;
-        /* border-bottom: 1px solid #233554; */
-        border-bottom: 1px solid #64ffda;
-        /* border-image: linear-gradient(135deg, #926aff 0%, #ff77b0 50%, #ffb367 100%);
-        border-image-slice: 1; Ensures full gradient coverage */
-    }
-    
-    .custom-navbar .navbar-nav .nav-link {
-        color: #ccd6f6;
-        /* color:black; */
-    }
-    
-    .custom-navbar .navbar-nav .nav-link:hover {
-        /* background-image: linear-gradient(135deg, #926aff 0%, #ff77b0 50%, #ffb367 100%); Teal highlight */
-        background-color: #64ffda;
-        color:black;
-    }
+    /* background-color: #080823; */
+    background-color: #0a192f;
+    /* background-color: #64ffda; */
+    color: #ccd6f6;
+    /* color: #e6f1ff; */
+    font-weight: bold;
+    /* border-bottom: 1px solid #233554; */
+    border-bottom: 1px solid #64ffda;
+    /* border-image: linear-gradient(135deg, #926aff 0%, #ff77b0 50%, #ffb367 100%);
+    border-image-slice: 1; Ensures full gradient coverage */
+}
+
+.custom-navbar .navbar-nav .nav-link {
+    color: #ccd6f6;
+    /* color:black; */
+}
+
+.custom-navbar .navbar-nav .nav-link:hover {
+    /* background-image: linear-gradient(135deg, #926aff 0%, #ff77b0 50%, #ffb367 100%); Teal highlight */
+    background-color: #64ffda;
+    color:black;
+}
     
     
     
@@ -59,7 +59,11 @@
 </head>
 <body>
     <div th:replace="~{navbar :: navbar}"></div>
-    <h1>Invalid User. Please login here or go back to main page.</h1>
+    <div class = "container mt-2">
+        <h1>Invalid User Credentials. You may go back to the main page <a th:href="@{/}">here.</a></h1>
+
+    </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>

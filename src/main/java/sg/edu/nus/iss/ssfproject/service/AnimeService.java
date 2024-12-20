@@ -86,10 +86,7 @@ public class AnimeService {
         return animeRepo.animeGenres();
     }
 
-    public void getTopAnimeByGenre(String genre) {
-        String getAnimeByGenreUrl = "";
-
-    }
+    
 
     public List<Anime> getAnimeListByGenre(String genre) throws JsonProcessingException  {
         List<Anime> animeListByGenre = new ArrayList<>();

@@ -29,6 +29,7 @@ public class LoginController {
     public String getUserRegisterPage(Model model,HttpSession session) {
         User user = new User();
         model.addAttribute("verifieduser",session.getAttribute("verifieduser"));
+        //if a user is logged in and tries to go to the register page, redirect them to landing page
         if (session.getAttribute("verifieduser")!= null) {
             return "redirect:/";
         }
@@ -40,14 +41,16 @@ public class LoginController {
     @PostMapping("/register/verify")
     public String verifyUserRegistration(@Valid @ModelAttribute("user") User user,BindingResult result,
     Model model) throws JsonProcessingException {
+        //for any form validation errors
         if (result.hasErrors()) {
             return "register2";
         }
+        //check if username exists
         if (loginUserService.checkIfUsernameExists(user.getUsername())) {
             model.addAttribute("errorMessage","User account already exists.");
             return "register2";
         }
-
+        //check if email exists
         if (loginUserService.checkIfEmailExists(user.getEmail())) {
             model.addAttribute("errorMessage","Email already exists.");
             return "register2";
@@ -60,6 +63,7 @@ public class LoginController {
     @GetMapping("/login")
     public String getLoginPage(HttpSession session,Model model) {
         model.addAttribute("verifieduser",session.getAttribute("verifieduser"));
+         //if a user is logged in and tries to go to the register page, redirect them to landing page
         if (session.getAttribute("verifieduser")!= null) {
             return "redirect:/";
         }
@@ -85,9 +89,14 @@ public class LoginController {
         session.setAttribute("verifieduser",verifiedUser);
         //add session
         String redirectUrl = (String) session.getAttribute("redirectUrl");
-        session.removeAttribute("redirectUrl"); // Clean up after redirect
-        return "redirect:" + (redirectUrl != null ? redirectUrl : "/");
-        // return "redirect:/";
+        //this function helps a user to go back to their previous page after logging in, else go back to landing page by default
+        if (redirectUrl == null) {
+            redirectUrl = "/";
+        }
+
+        session.removeAttribute("redirectUrl"); // remove lingering redirectUrl post-login.
+        return "redirect:" + redirectUrl;
+        
     }
 
     @GetMapping("/logout")

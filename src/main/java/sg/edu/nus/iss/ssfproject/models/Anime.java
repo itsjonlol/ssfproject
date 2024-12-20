@@ -1,15 +1,11 @@
 package sg.edu.nus.iss.ssfproject.models;
 
 import java.util.List;
-import java.util.Objects;
 
 public class Anime {
     
     private Integer mal_id;
-    //which image
     private String large_image_url;
-
-    // youtube trailer omit first
     private String title;
     private String title_japanese;
     private String type;
@@ -190,16 +186,24 @@ public class Anime {
     }
     
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Anime anime = (Anime) o;
-        return Objects.equals(mal_id, anime.mal_id); // Compare by unique identifier
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Anime anime = (Anime) obj;
+        if (mal_id == null) {
+            if (anime.mal_id != null)
+                return false;
+        } else if (!mal_id.equals(anime.mal_id))
+            return false;
+        return true;
     }
-
     @Override
     public int hashCode() {
-        return Objects.hash(mal_id); // Use the same unique identifier
+        return mal_id == null ? 0 : mal_id.hashCode(); // Use the same unique identifier
     }
 
 
