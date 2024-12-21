@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        body {
+    background-color: #0a192f; /* Deep dark blue */
+    color: #ccd6f6; /* Soft pale blue text */
+}
+
+        /* change the bottom 3 */
+        /* Ensure the image doesn't stretch vertically */
+        .media-img-wrapper {
+            flex: 0 0 auto; /* Prevent it from shrinking */
+            width: 100%; /* Allow it to scale, but maintain aspect ratio */
+            max-width: 250px; /* Adjust as needed */
+        }
+
+        .anime-image {
+            width: 100%;
+            height: auto;
+        }
+
+
+        .button-container {
+            height: 50px; 
+            min-height: 50px; 
+        }
+        
+        .custom-badge {
+            background-color: #64ffda;
+            color:black;
+        }
+
+
+        
+        .custom-navbar {
+        background-color: #0a192f;
+        color: #ccd6f6; /* Text color */
+        font-weight:bold;
+        border-bottom: 1px solid #64ffda;
+        
+        }
+        .custom-navbar .navbar-nav .nav-link {
+            color: #ccd6f6 /* White color for navbar links */
+        }
+
+        .custom-navbar .navbar-nav .nav-link:hover {
+            background-color: #64ffda;
+            color:black;
+        }
+    </style>
+</head>
+
+<body>
+    <div th:replace="~{fragment/navbar :: navbar}"></div>
+    <div th:if="${error}" th:text="${error}"></div>
+    <div class = "container">
+
+       
+        <div class = "media d-flex flex-column flex-md-row gap-4 mt-4 m-auto">
+            <div class="media-img-wrapper">
+                <img class="anime-image mr-3" th:src="@{${anime.large_image_url}}" alt="Anime Cover">
+            </div>
+            <div class = "media-body">
+                <div class ="anime-title fs-1 fw-bold lh-1 mb-2"th:text="${anime.title}">Anime Title</div>
+                <div class="lh-1 mb-0">
+                    <p th:text="'Japanese Title: ' + (${anime.title_japanese} ?: 'Unknown')">Japanese Title</p>
+                    <p th:text="'Episodes: ' + (${anime.episodes} ?: 'Unknown')">Episodes</p>
+                    <p th:text="'Status: ' + (${anime.status} ?: 'Unknown')">Status</p>
+                    <p th:text="'Duration: ' + (${anime.duration} ?: 'Unknown')">Duration</p>
+                    <p th:text="'Type: ' + (${anime.type} ?: 'Unknown')">Type</p>
+                    <p th:text="'Rank: #' + (${anime.rank} ?: 'Unknown')">Rank</p>
+                    <p th:text="'Score: ' + (${anime.score} ?: 'Unknown')">Score</p>
+                    
+                    <p th:if="${anime.year !=null}" th:text="'Aired: ' + ${anime.year}"></p>
+                    <p th:if="${anime.year == null}">Aired: Unknown</p>
+                    <!-- <p th:text="'Aired: ' + (${anime.year} ?: 'Unknown')">Aired</p> -->
+                </div>
+                <div class="anime-genres d-flex flex-wrap gap-2 mb-4">
+                    <span class="custom-badge badge  rounded-pill " th:each="genre : ${anime.genres}" th:text="${genre} ?: 'Unknown'">Genre</span>
+                </div>
+                <div class="alert alert-warning mb-2" th:if="${errorMessage}" th:text="${errorMessage}" style="background: red; color: white;"></div>
+                <div class="button-container d-flex flex-column">
+                    <div th:if="${verifieduser == null or !animeinwatchlist}">
+                        <a class="btn btn-primary" th:href="@{'/addanime/' + ${anime.mal_id}}">Add to watchlist</a>
+                    </div>
+                    <div th:if="${verifieduser != null and animeinwatchlist}">
+                        <p class="btn btn-success">Anime added to watchlist</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <hr class="my-4" />
+
+        <div>
+            <h3>Synopsis</h3>
+            <p th:text="${anime.synopsis} ?: 'No synopsis available.'">This is the anime synopsis. It will be replaced with the actual content.</p>
+        </div>
+
+        <hr class="my-4" />
+
+        <div class="mb-4 d-flex flex-wrap gap-2 ">
+            <h5>Studios:</h5>
+            
+            <span class="custom-badge badge rounded-pill d-flex justify-content-center align-items-center " th:each="studio : ${anime.studios}" th:text="${studio} ?: 'Unknown'">Studio Name</span>
+            <span th:if="${anime.studios == null || anime.studios.isEmpty()}">Unknown</span>
+        
+        </div>
+
+        <div class="mb-4 d-flex flex-wrap gap-2">
+            <h5>Producers:</h5>
+            
+                <span class="custom-badge badge rounded-pill d-flex justify-content-center align-items-center" th:each="producer : ${anime.producers}" th:text="${producer} ?: 'Unknown'">Producer Name</span>
+                <span th:if="${anime.producers == null || anime.producers.isEmpty()}">Unknown</span>
+            
+        </div>
+    </div>
+    
+    <!-- <div class="anime-details-container m-auto">
+        <div class="row">
+            <div class="col-md-4 anime-image d-flex">
+                <img th:src="@{${anime.large_image_url}}" alt="Anime Cover">
+            </div>
+            <div class="col-md-8 d-flex flex-column justify-content-between">
+                <div class="anime-title" th:text="${anime.title}">Anime Title</div>
+                <div class="anime-metadata">
+                    <p th:text="'Japanese Title: ' + (${anime.title_japanese} ?: 'Unknown')">Japanese Title</p>
+                    <p th:text="'Episodes: ' + (${anime.episodes} ?: 'Unknown')">Episodes</p>
+                    <p th:text="'Status: ' + (${anime.status} ?: 'Unknown')">Status</p>
+                    <p th:text="'Duration: ' + (${anime.duration} ?: 'Unknown')">Duration</p>
+                    <p th:text="'Type: ' + (${anime.type} ?: 'Unknown')">Type</p>
+                    <p th:text="'Rank: #' + (${anime.rank} ?: 'Unknown')">Rank</p>
+                    <p th:text="'Score: ' + (${anime.score} ?: 'Unknown')">Score</p>
+                    <p th:text="'Aired: ' + (${anime.year} ?: 'Unknown')">Aired</p>
+                </div>
+                <div class="anime-genres">
+                    <span th:each="genre : ${anime.genres}" th:text="${genre} ?: 'Unknown'">Genre</span>
+                </div>
+                <div th:if="${errorMessage}" th:text="${errorMessage}"></div>
+                <div th:if="${verifieduser == null or !animeinwatchlist}">
+                    <a th:href="@{'/addanime/' + ${anime.mal_id}}">Add to watchlist</a>
+                </div>
+                <div th:if="${verifieduser != null and animeinwatchlist}">
+                    <p>Anime added to watchlist<p>
+                </div>
+                
+
+            </div>
+        </div> -->
+
+        <!-- <hr class="my-4" />
+
+        <div class="anime-synopsis">
+            <h3>Synopsis</h3>
+            <p th:text="${anime.synopsis} ?: 'No synopsis available.'">This is the anime synopsis. It will be replaced with the actual content.</p>
+        </div>
+
+        <hr class="my-4" />
+
+        <div class="info-section">
+            <h5>Studios</h5>
+            <ul>
+                <li th:each="studio : ${anime.studios}" th:text="${studio} ?: 'Unknown'">Studio Name</li>
+                <li th:if="${anime.studios == null || anime.studios.isEmpty()}">Unknown</li>
+            </ul>
+        </div>
+
+        <div class="info-section">
+            <h5>Producers</h5>
+            <ul>
+                <li th:each="producer : ${anime.producers}" th:text="${producer} ?: 'Unknown'">Producer Name</li>
+                <li th:if="${anime.producers == null || anime.producers.isEmpty()}">Unknown</li>
+            </ul>
+        </div> -->
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+</body>
+
+</html>

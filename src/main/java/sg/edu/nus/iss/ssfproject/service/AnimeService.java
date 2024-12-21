@@ -152,7 +152,7 @@ public class AnimeService {
         List<Anime> animeListByQuery = this.fetchAnimeApi(animeByQueryUrl);
         //filter the type of anime able to be searched.
         // Set<String> allowedTypes = Set.of("tv", "movie", "ova","ona","tv_special");
-        Set<String> allowedAnimeTypes = Stream.of("TV", "MOVIE", "OVA", "ONA","TV_SPECIAL")
+        Set<String> allowedAnimeTypes = Stream.of("TV", "MOVIE", "OVA", "ONA","TV SPECIAL")
         .collect(Collectors.toUnmodifiableSet());
         //for api errors
         if (!animeListByQuery.isEmpty()) {
