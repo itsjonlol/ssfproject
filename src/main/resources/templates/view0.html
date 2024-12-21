@@ -8,168 +8,74 @@
     <link rel="stylesheet" th:href="@{/styles/navbar.css}">
     <style>
      
-
-.anime-card {
-    /* background-color: #112240; Slightly lighter blue-gray */
-    color: #e6f1ff;
+    
+.anime-wrapper {
+    max-width: 250px; 
     border-radius: 10px;
-    overflow: hidden;
-    transition: transform 0.3s, box-shadow 0.3s;
-    box-shadow: 0 4px 6px rgba(2, 12, 27, 0.7); /* Subtle shadow */
+    transition: transform 0.3s ;
+    
 }
 
-.anime-card:hover {
+.anime-wrapper:hover {
     transform: scale(1.05);
-    box-shadow: 0 8px 16px rgba(2, 12, 27, 0.9); /* Elevated shadow on hover */
-    /* background-image: linear-gradient(135deg, #926aff 0%, #ff77b0 50%, #ffb367 100%); */
-    /* background-color: #64ffda; */
-    color:black;
 }
 
-.anime-image {
-    width: 100%;
-    height: 280px;
-    object-fit: cover;
-}
-
-.anime-title {
-    padding: 5px;
-    font-weight: bold;
-    font-size: 0.9rem;
-    color: #ccd6f6; /* Slightly softer blue */
-}
 
 .custom-dropdown-btn {
-    /* background-image: linear-gradient(135deg, #926aff 0%, #ff77b0 50%, #ffb367 100%);Medium steel blue */
     background-color: rgba(100, 255, 218, 0.85);
-    
     color: black;
-    border: 1px solid #486581; /* Soft gray-blue border */
-    font-weight: bold;
 }
 
 .custom-dropdown-btn:hover {
-    background-color: #3a506b; /* Darker steel blue */
-    color: #ffffff;
+    background-color: #3a506b; 
+    color: white;
 }
 
-.btn:focus, .btn:active {
-    background-color: #64ffda; /* Bright teal for focus */
-    color: #0a192f;
-    border-color: #64ffda;
-}
 
 .dropdown-menu {
-    background-color: #112240;
-    border: 1px solid #233554;
-    border-radius: 10px;
+    background-color: #0a192f;
 }
 
 .dropdown-item {
-    color: #e6f1ff;
+    color: #ccd6f6;
 }
 
 .dropdown-item:hover {
-    background-color: #233554;
-    color: #ffffff;
+    background-color: #233550;
+    color: white;
 }
 
 .dropdown-item.active {
-    background-color: #64ffda; /* Teal for active state */
-    color: #0a192f;
+    background-color: #64ffda; 
+    color: black;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
     </style>
 </head>
 <body>
     <div th:replace="~{fragment/navbar :: navbar}"></div>
-    <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-           
-            <a class="navbar-brand d-flex" href="#">
-                <span>Anime Finder</span>
-                
-
-            </a>
-            <span th:if="${verifieduser != null} "  th:text="'Hello,' + ${verifieduser.username}" class="nav-item"></span>
-    
-          
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-    
-           
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto"> 
-                   
-                </ul>
-    
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/search">Search</a>
-                    </li>
-                  
-                    <li th:if="${verifieduser == null}" class="nav-item">
-                        <a class="nav-link" href="/register">Register</a>
-                    </li>
-                    <li th:if="${verifieduser == null}" class="nav-item">
-                        <a class="nav-link" href="/login">Login</a>
-                    </li>
-                    
-                    <li th:if="${verifieduser != null}" class="nav-item">
-                        <a class="nav-link" th:href="@{'/watchlist/' + ${verifieduser.username}}">My watchlist</a>
-                    </li>
-                    <li th:if="${verifieduser != null}" class="nav-item">
-                        <a class="nav-link" href="/logout">Logout</a>
-                    </li>
-                    
-                </ul>
-            </div>
-        </div>
-    </nav> -->
-    
-    
-    
-   
     
     <div class="container mt-5">
-        <h1 class="text-center mb-4" style="color:#ccd6f6;">Top Anime</h1>
+        <h1 class="text-center mb-4">Top Anime</h1>
 
-
-        <div class="dropdown filter-menu mb-4">
-            <button class="btn custom-dropdown-btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                <span th:text="${selectedgenre}">Select Genre</span> <!-- Default text -->
+        <div class="dropdown mb-4">
+            <button class="btn custom-dropdown-btn dropdown-toggle fw-bold" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <span th:text="${selectedgenre}"></span> 
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 <li th:each="genre : ${animegenres}">
-                    <a class="dropdown-item" th:href="@{/filter/{genrename}(genrename=${genre})}" th:text="${genre}" th:classappend="${genre == selectedgenre ? 'active' : ''}"></a>
+                    <a class="dropdown-item" th:class="${genre.equals(selectedgenre) ? 'dropdown-item active' : 'dropdown-item'}" th:href="@{/filter/{genrename}(genrename=${genre})}" th:text="${genre}" ></a>
                 </li>
             </ul>
         </div>
         
-        <!-- Anime Cards Section -->
-        <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
-            <div class="col-6 col-sm-4 col-lg-2" th:each="anime : ${animelist}">
-                <div class="anime-card">
+        
+        <div class="row g-3">
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2" th:each="anime : ${animelist}">
+                <div class="anime-wrapper">
                     <a th:href="@{'/' + ${anime.mal_id}}" >
-                    <img th:src="@{${anime.large_image_url}}" alt="Anime Image" class="anime-image">
+                    <img th:src="@{${anime.large_image_url}}" th:alt="${anime.title}"  style="width: 100%; height: 280px; border-radius: 10px;">
                     </a>
-                    <div class="anime-title" th:text="${anime.title}" >
+                    <div class="fw-bold p-1" th:text="${anime.title}" >
                         
                     </div>
                 </div>
@@ -183,9 +89,6 @@
     </div>
     
     
-
-
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYgUYL8k0L6CO2gmF5pDI5M9z7u9l03CDR0V2K5dGQd6zNjR9MtG29AqT" crossorigin="anonymous"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>

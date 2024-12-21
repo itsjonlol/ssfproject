@@ -31,7 +31,7 @@
     <div class = "container">
         <div class = "media d-lg-flex gap-4 mt-4">
             <div class="media-img-wrapper mt-4">
-                <img class=" mr-3" th:src="@{${anime.large_image_url}}" alt="Anime Cover" style="width: 100%; height: auto;">
+                <img class=" mr-3" th:src="@{${anime.large_image_url}}" alt="Anime Cover" style="width: 100%; height: auto; border-radius: 10px;">
             </div>
             <div class = " media-body">
                 <div class ="mt-3 fs-1 fw-bold lh-1 mb-3" th:text="${anime.title}">Anime Title</div>
@@ -109,6 +109,10 @@
                 <div th:if="${anime.producers.isEmpty()}">Unknown</div>
             
         </div>
+    </div>
+    <hr>
+    <div class="container">
+        <div th:replace="~{fragment/footer :: footer}"></div>
     </div>
     
     
