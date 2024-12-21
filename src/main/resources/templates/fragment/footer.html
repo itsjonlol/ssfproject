@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div th:fragment="footer">
+        <footer class="d-flex flex-row justify-content-between align-content-center my-3">
+                
+            <div>
+                <a href="/">
+                <img th:src="@{/images/logo2.png}" width="50px" height="auto">
+                </a>
+            </div>
+
+            <div>
+                Powered by <a href="https://jikan.moe" target="_blank" class="text-decoration-none">Jikan API</a>
+            </div>
+
+            <div>
+                <a href="https://github.com/itsjonlol/ssfproject" target="_blank" class="text-muted text-decoration-none">
+                    <img src="/images/github-mark-white.png" width="24" height="24">
+
+                </a>
+                
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

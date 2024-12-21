@@ -6,21 +6,14 @@
     <title>Anime Search</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+    <link rel="stylesheet" th:href="@{/styles/navbar.css}">
     <style>
-        /* * {
-            padding: 0;
-            margin: 0;
-            box-sizing: border-box;
-            font-family: sans-serif;
-        } */
-        body {
-            background-color: #0a192f;
-            color: #ccd6f6;
-            text-align: center;
-        }
+        
+        
         h1 {
             font-size: 40px;
             margin: 20px 0;
+            text-align: center;
         }
         .swiper {
             width: 100%;
@@ -38,12 +31,12 @@
             -webkit-box-reflect: below 1px linear-gradient(transparent, transparent, #0002, #0004);
         }
         .swiper-slide {
-  opacity: 0.7;
-}
+            opacity: 0.7;
+        }
 
-.swiper-slide-active {
-  opacity: 1;
-}
+        .swiper-slide-active {
+        opacity: 1;
+        }
         .custom-btn {
             /* background-image: linear-gradient(135deg, #926aff 0%, #ff77b0 50%, #ffb367 100%); */
             /* color:#ccd6f6; */
@@ -81,31 +74,11 @@
             /* font-size:16px; */
         }
         
-
-        .custom-navbar {
-    background-color: #0a192f;
-    color: #e6f1ff;
-    font-weight: bold;
-    /* border-bottom: 1px solid #233554; */
-    border-bottom: 1px solid #64ffda;
-    /* border-image: linear-gradient(135deg, #926aff 0%, #ff77b0 50%, #ffb367 100%);
-    border-image-slice: 1; Ensures full gradient coverage */
-}
-
-.custom-navbar .navbar-nav .nav-link {
-    color: #ccd6f6;
-}
-
-.custom-navbar .navbar-nav .nav-link:hover {
-    /* background-image: linear-gradient(135deg, #926aff 0%, #ff77b0 50%, #ffb367 100%); Teal highlight */
-    background-color: #64ffda;
-    color:black;
-}
         
     </style>
 </head>
 <body>
-    <div th:replace="~{navbar :: navbar}"></div>
+    <div th:replace="~{fragment/navbar :: navbar}"></div>
     <h1>Lookup your favourite anime</h1>
 
     <!-- Search Form -->
@@ -154,6 +127,13 @@
     
         
     </div>
+   
+    <div class = "fixed-bottom">
+        <hr>
+        <div class="container">
+            <div th:replace="~{fragment/footer :: footer}"></div>
+        </div>
+    </div>      
     
 
     

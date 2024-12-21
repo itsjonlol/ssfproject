@@ -162,10 +162,16 @@ public class UserController {
 
         //retrieve anime based on its id
         Anime anime = animeService.getAnimeById(id); 
+
         
         //retrieve the current user
         User verifiedUser = (User) session.getAttribute("verifieduser");
         model.addAttribute("verifieduser",verifiedUser);
+
+         // if one tries to go to another person's watchlist, reject them
+         if (verifiedUser == null) {
+            return "invalidusererror";
+        } 
 
         //display current watchlist
         List<Anime> verifiedUserWatchList = verifiedUser.getWatchListAnime();

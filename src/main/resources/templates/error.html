@@ -4,13 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/styles/navbar.css}">
 </head>
 <body>
+    <div th:replace="~{fragment/navbar :: navbar}"></div>
+    <div class="container">
     <h1>We cant seem to process your request at this moment.</h1>
-    <p>Possible reasons:</p>
-    <p>Our API calls to an external server are currently on hold or being rate-limited.</p>
-    <p>An invalid link or endpoint has been entered.</p>
-    <a th:href="@{/}">Click here to go back to main page</a>
+        <p>Possible reasons:</p>
+        <ul>
+            <li>Our API calls to an external server are currently on hold or being rate-limited.</li>
+            <li>An invalid link or endpoint has been entered.</li>
+            <li>Attempted to access an invalid anime</li>
+        </ul>
+        
+        <p>You may go back to the main page <a th:href="@{/}">here.</a></p>
+    </div>
+    <div class = "fixed-bottom">
+        <hr>
+        <div class="container">
+            <div th:replace="~{fragment/footer :: footer}"></div>
+        </div>
+    </div>      
     
 </body>
 </html>

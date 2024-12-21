@@ -95,7 +95,7 @@
 
 
 <body>
-    <div th:replace="~{navbar :: navbar}"></div>
+    <div th:replace="~{fragment/navbar :: navbar}"></div>
     
 
     <div th:if="${torecommend}" class="container">
@@ -167,7 +167,11 @@
             </div>
         </div>
     </div>
-    
+    <hr>
+    <div class="container">
+        <div th:replace="~{fragment/footer :: footer}"></div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script>
         var swiper = new Swiper(".mySwiper", {
