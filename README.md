@@ -10,8 +10,17 @@ Some features of this application includes:
 - Create an account and add anime to your own watchlist
 - Be recommended a list of anime for you to watch based on your watchlist
 
+Technologies:
+- Thymeleaf as a server-side template engine, with BootStrap and SwiperJS for designing the application
+- Java SpringBoot for backend
+- Redis for caching and being used as a small database
+
 
 Credits:
 - https://jikan.moe
 - https://www.wallpaperflare.com/makoto-shinkai-kimi-no-na-wa-starry-night-comet-wallpaper-upurj/download 
 - https://wallpapers.com/wallpapers/purple-sky-anime-city-jfyl3kuulzsbh0oa.html
+
+Website link:
+- https://humorous-integrity-production.up.railway.app
+
