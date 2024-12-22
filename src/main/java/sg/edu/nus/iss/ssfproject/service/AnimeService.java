@@ -79,6 +79,8 @@ public class AnimeService {
             }
             
         }
+        animeGenreMap.forEach((key, value) -> System.out.println(key + ":" + value));
+        System.out.println(animeGenreMap.size());
     }
     
     //get the list of genres to display in front page

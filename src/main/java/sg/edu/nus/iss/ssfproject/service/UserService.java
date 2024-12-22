@@ -113,13 +113,16 @@ public class UserService {
         //algorithm 1: pick random 2 genres if size of watchlist is less than 5
         if (watchListAnime.size() <= 5) {
             //get list of genres in approved genre list stored in redis
-            Set<Object> objects = userRepo.getAllKeysFromHash(ConstantVar.genresRedisKey);
+            Map<String,Integer> animeGenreMap = animeService.getAnimeGenreMap();
+            Set<String> keySet = animeGenreMap.keySet();
             List<String> keys = new ArrayList<>();
-            for (Object object : objects) {
-                String key = (String) object;   
+            for (String key : keySet) {
+                
                 keys.add(key);
+                System.out.println("The map key is + " + key);
                 
             }
+           
             Random random = new Random();
             List<String> randomGenres = new ArrayList<>();
             
@@ -171,9 +174,10 @@ public class UserService {
         List<String> genreIdsList = new ArrayList<>();
         for ( String genre : genresList) {
             System.out.println("Users genre: " + genre);
-            String genreId = animeRepo.getValueFromHash(ConstantVar.genresRedisKey,genre);
+            Map<String,Integer> animeGenreMap = animeService.getAnimeGenreMap();
+            String genreId = String.valueOf(animeGenreMap.get(genre));
+           
             genreIdsList.add(genreId);
-            System.out.println("genreid: " + genreId);
 
         }
         List<Anime> finalRecommendedAnimeList = new ArrayList<>();
@@ -190,7 +194,7 @@ public class UserService {
             System.out.println(anime.toString());
             //want to ensure that the recommended list doesn't already contain the anime the user has already watched
             //get 20 recommendations max
-            if (!watchListAnime.contains(anime) && finalRecommendedAnimeList.size() < 20) {
+            if (!watchListAnime.contains(anime) && finalRecommendedAnimeList.size() < 21) {
                 finalRecommendedAnimeList.add(anime);
                 // userRepo.setHash(ConstantVar.usersRedisKey, , animeByDiffGenreIdsUrl);
             }
