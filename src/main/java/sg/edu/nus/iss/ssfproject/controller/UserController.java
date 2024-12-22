@@ -57,7 +57,7 @@ public class UserController {
         session.setAttribute("redirectUrl", "/"+id);
   
     
-        return "view2C";
+        return "indanime";
     }
     //function to add anime for a user
     @GetMapping("/addanime/{animeid}")
@@ -75,7 +75,7 @@ public class UserController {
         if (session.getAttribute("verifieduser") == null) {
             model.addAttribute("errorMessage","Please login first before adding to watchlist");
             session.setAttribute("redirectUrl", "/"+id);
-            return "view2C";
+            return "indanime";
         }
         //if logged in. 
         model.addAttribute("animeinwatchlist",userService.animeInUserWatchList(anime, verifiedUser));
@@ -90,7 +90,7 @@ public class UserController {
         
 
     
-        return "view2C";
+        return "indanime";
     }
 
     @GetMapping("/watchlist/{verifiedusername}")

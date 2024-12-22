@@ -34,7 +34,7 @@ public class LoginController {
             return "redirect:/";
         }
         model.addAttribute("user",user);
-        return "register2";
+        return "register";
     }
 
     //add bindingresult and verification
@@ -43,17 +43,17 @@ public class LoginController {
     Model model) throws JsonProcessingException {
         //for any form validation errors
         if (result.hasErrors()) {
-            return "register2";
+            return "register";
         }
         //check if username exists
         if (loginUserService.checkIfUsernameExists(user.getUsername())) {
             model.addAttribute("errorMessage","User account already exists.");
-            return "register2";
+            return "register";
         }
         //check if email exists
         if (loginUserService.checkIfEmailExists(user.getEmail())) {
             model.addAttribute("errorMessage","Email already exists.");
-            return "register2";
+            return "register";
 
         }
         
@@ -67,7 +67,7 @@ public class LoginController {
         if (session.getAttribute("verifieduser")!= null) {
             return "redirect:/";
         }
-        return "login2";
+        return "login";
     }
 
     @PostMapping("/login/verify")
@@ -78,12 +78,12 @@ public class LoginController {
         //check to see if username exists
         if (!loginUserService.checkIfUsernameExists(username)) {
             model.addAttribute("errorMessage","User account does not exist");
-            return "login2";
+            return "login";
         }
         //verify password if username exists
         if (!loginUserService.checkIfPasswordMatches(username, password)) {
             model.addAttribute("errorMessage","Invalid password");
-            return "login2";
+            return "login";
         }
         User verifiedUser = loginUserService.getVerfiedUser(username);
         session.setAttribute("verifieduser",verifiedUser);

@@ -60,7 +60,7 @@ public class AnimeController {
         model.addAttribute("selectedgenre",genre);
          //update url so that user can go back to this page post-login
         session.setAttribute("redirectUrl", "/topanimes");
-        return "view0";
+        return "topanimes";
     }
     
     @GetMapping("/filter/{genrename}")
@@ -86,7 +86,7 @@ public class AnimeController {
         System.out.println(genre);
          //update url so that user can go back to this page post-login
         session.setAttribute("redirectUrl", "/filter/"+ genre);
-        return "view0"; 
+        return "topanimes"; 
     }
 
     @GetMapping("/search")
@@ -96,7 +96,7 @@ public class AnimeController {
         model.addAttribute("verifieduser",verifiedUser);
         //update url so that user can go back to this page post-login
         session.setAttribute("redirectUrl", "/search");
-        return "view1B";
+        return "search";
     }
 
     @PostMapping("/searchresult")
@@ -105,7 +105,7 @@ public class AnimeController {
         //to ensure doesnt start with special characters.
         if (!query.matches("^[a-zA-Z0-9].*")) {
             model.addAttribute("errorMessage","Invalid input. Please start with an alphanumeric character");
-            return "view1B";
+            return "search";
         }
         //get search results
         List<Anime> animeListByQuery = animeService.getAnimeListByQuery(query);
@@ -124,7 +124,7 @@ public class AnimeController {
         User verifiedUser = (User) session.getAttribute("verifieduser");
         model.addAttribute("verifieduser",verifiedUser);
 
-        return "view1B";
+        return "search";
     }
 
     

@@ -39,9 +39,7 @@ public class AnimeUtil {
         JsonArray producerArray = (!jObject.isNull("producers")) ? jObject.getJsonArray("producers") : null;
         JsonArray studioArray = (!jObject.isNull("studios")) ? jObject.getJsonArray("studios") : null;
         JsonArray genreArray = (!jObject.isNull("genres")) ? jObject.getJsonArray("genres") : null ;
-        // JsonArray producerArray = jObject.getJsonArray("producers");
-        // JsonArray studioArray = jObject.getJsonArray("studios");
-        // JsonArray genreArray = jObject.getJsonArray("genres");
+
 
         List<String> producers = new ArrayList<>();
         List<String> studios = new ArrayList<>();
