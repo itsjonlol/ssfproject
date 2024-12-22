@@ -30,8 +30,7 @@ EXPOSE ${SERVER_PORT}
 # Run the application
 ENTRYPOINT SERVER_PORT=${SERVER_PORT} java -jar target/ssfproject-SNAPSHOT.jar
 
-#docker build -t itsjonlol/mock1:0.0.1 . 
-#docker run -d -t -p 4000:4000 itsjonlol/mock1:0.0.1 
+#docker build -t itsjonlol/ssfproject:0.0.1 . 
 
 #Stage 2
 FROM maven:3.9.9-eclipse-temurin-23

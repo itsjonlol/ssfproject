@@ -101,7 +101,7 @@
     <div class="container">
         <h1 >My Watchlist</h1>
         <div class="list-group list-group-flush ">
-            <div class="list-group-item d-flex align-items-center custom-list-group" th:each="anime : ${watchlist}">
+            <div class="list-group-item d-flex align-items-center custom-list-group border-0" th:each="anime : ${watchlist}">
                 <a th:href="@{'/' + ${anime.mal_id}}">
                     <img th:src="${anime.large_image_url}" alt="Anime Image" class="me-2" style="width: 100px; height: auto;">
                 </a>
