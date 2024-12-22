@@ -24,6 +24,9 @@ public class UserRepo {
     public Boolean hashExists(String redisKey) {
         return template.hasKey(redisKey);
     }
+    // public Boolean listExists(String redisKey) {
+    //     return template.hasLi
+    // }
     public String getValueFromHash(String redisKey, String mapKey) {
         return (String) template.opsForHash().get(redisKey, mapKey); //hget c01 email
         //hgetall c01

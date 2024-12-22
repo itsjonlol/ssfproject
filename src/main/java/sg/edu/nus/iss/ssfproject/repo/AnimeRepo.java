@@ -3,7 +3,6 @@ package sg.edu.nus.iss.ssfproject.repo;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -52,12 +51,24 @@ public class AnimeRepo {
     public void setHash(String redisKey, String mapKey, String value) {
         template.opsForHash().put(redisKey,mapKey, value);
     }
+    public List<String> getList(String redisKey) {
+        List<String> list = template.opsForList().range(redisKey,0,-1); //lrange redisKey 0 -1
+        return list;
+    }
     //update a single key-value pair in a hash (UPDATE)
     //may need to fixate String mapKey and update value directly
     public void updateValue(String redisKey,String mapKey,String value) {
         template.opsForHash().put(redisKey, mapKey,value); //hset c01 email fred@gmail.com
     }
+    public void createValue(String redisKey,String value) {//set name "Fred Flintstone"
+    template.opsForValue().set(redisKey,value); // template.opsForValue().set("name","Fred Flintstone");
 
+    // setifpresent
+    // setifabsent
+}
+    public void rightPush(String key, String value) {
+        template.opsForList().rightPush(key, value);
+    }
     // Get the list of values from hash ( the rawData ) (READALL)
     public List<Object> getAllValuesFromHash(String redisKey) {
     
@@ -117,7 +128,7 @@ public class AnimeRepo {
 
 
     // Add multiple key-value pairs to a hash
-    public void setMapAll(String redisKey, HashMap<String, String> map) {
+    public void setMapAll(String redisKey, Map<String, String> map) {
         template.opsForHash().putAll(redisKey, map);
     }
 

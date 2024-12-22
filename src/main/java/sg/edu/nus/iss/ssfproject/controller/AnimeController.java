@@ -25,12 +25,13 @@ public class AnimeController {
     AnimeService animeService;
     
     @GetMapping("/")
-    public String getLanding(Model model,HttpSession session) {
+    public String getLanding(Model model,HttpSession session) throws JsonProcessingException {
         User verifiedUser = (User) session.getAttribute("verifieduser");
         //update nav bar to show whether a user is logged in
         model.addAttribute("verifieduser",verifiedUser);
         //update url so that user can go back to this page post-login
         session.setAttribute("redirectUrl", "/");
+        
         return "landing";
     }
     
@@ -49,6 +50,7 @@ public class AnimeController {
         
         //account for api errors
         List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);
+
         if (!animeListByGenre.isEmpty()) {
             if ( animeListByGenre.getFirst().getTitle().equals("apierror") ) {
                 return "error";
@@ -73,6 +75,7 @@ public class AnimeController {
 
         //for api error cases
         List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);
+      
         if (!animeListByGenre.isEmpty()) {
             if ( animeListByGenre.getFirst().getTitle().equals("apierror") ) {
                 return "error";
