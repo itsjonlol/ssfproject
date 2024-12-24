@@ -44,7 +44,7 @@ public class AnimeService {
     RestTemplate restTemplate = new RestTemplate();
  
 
-    public void getAnimeGenre() {
+    public void getAnimeGenresFromApiCall() {
 
         //a map is required to map the anime genre name to its id.
         //not allowed to fetch anime of different categories via genre name. required to use genre id.
@@ -52,12 +52,18 @@ public class AnimeService {
         animeGenreMap = new HashMap<>();
         
         //fetch the different anime genres to cater to most audiences
-        ResponseEntity<String> standardGenreData = restTemplate.getForEntity(Url.animeGenres+"?filter=genres", String.class);
+
+        try {
+            ResponseEntity<String> standardGenreData = restTemplate.getForEntity(Url.animeGenres+"?filter=genres", String.class);
         
-        ResponseEntity<String> demographicGenreData = restTemplate.getForEntity(Url.animeGenres+"?filter=demographics", String.class);
+            ResponseEntity<String> demographicGenreData = restTemplate.getForEntity(Url.animeGenres+"?filter=demographics", String.class);
+            
+            processGenreResponse(standardGenreData.getBody());
+            processGenreResponse(demographicGenreData.getBody());
+        } catch (RestClientException ex) {
+            System.out.println("Failed to get anime genres. " + ex.getMessage());
+        }
         
-        processGenreResponse(standardGenreData.getBody());
-        processGenreResponse(demographicGenreData.getBody());
         
     }
     
@@ -84,7 +90,7 @@ public class AnimeService {
     }
     
     //get the list of genres to display in front page
-    public List<String> getAnimeGenres() {
+    public List<String> getAnimeGenresForFrontPage() {
         return animeRepo.animeGenres();
     }
 

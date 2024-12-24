@@ -23,9 +23,9 @@ public class SsfprojectApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		
-	
-		animeService.getAnimeGenre();
-		List<String> animeGenresList = animeService.getAnimeGenres();
+		//api error handled in service
+		animeService.getAnimeGenresFromApiCall();
+		List<String> animeGenresList = animeService.getAnimeGenresForFrontPage();
 		//so can pre-load the first category
 		animeService.getAnimeListByGenre(animeGenresList.get(0));
 		

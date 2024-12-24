@@ -44,13 +44,13 @@ public class AnimeController {
         User verifiedUser = (User) session.getAttribute("verifieduser");
         model.addAttribute("verifieduser",verifiedUser);
         //get list of approved genres to be displayed in front end.
-        List<String> animeGenres = animeService.getAnimeGenres();
+        List<String> animeGenres = animeService.getAnimeGenresForFrontPage();
         
         model.addAttribute("animegenres",animeGenres);
         
-        //account for api errors
+        
         List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);
-
+        //account for api errors
         if (!animeListByGenre.isEmpty()) {
             if ( animeListByGenre.getFirst().getTitle().equals("apierror") ) {
                 return "error";
@@ -70,12 +70,12 @@ public class AnimeController {
         User verifiedUser = (User) session.getAttribute("verifieduser");
         model.addAttribute("verifieduser",verifiedUser);
          //get list of approved genres to be displayed in front end.
-        List<String> animeGenres = animeService.getAnimeGenres();
+        List<String> animeGenres = animeService.getAnimeGenresForFrontPage();
         model.addAttribute("animegenres",animeGenres);
 
-        //for api error cases
+        
         List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);
-      
+         //for api error cases
         if (!animeListByGenre.isEmpty()) {
             if ( animeListByGenre.getFirst().getTitle().equals("apierror") ) {
                 return "error";
