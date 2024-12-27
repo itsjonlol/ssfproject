@@ -128,9 +128,11 @@ public class AnimeRepo {
 
 
     // Add multiple key-value pairs to a hash
-    public void setMapAll(String redisKey, Map<String, String> map) {
+    public void setMapAllWithTTL(String redisKey, Map<String, String> map, long seconds) {
         template.opsForHash().putAll(redisKey, map);
+        template.expire(redisKey, Duration.ofSeconds(seconds));
     }
+    
 
     // Retrieve all key-value pairs in a hash
     public Map<Object, Object> getAllFromHash(String redisKey) {

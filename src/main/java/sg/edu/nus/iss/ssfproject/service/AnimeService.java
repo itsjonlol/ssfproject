@@ -127,7 +127,8 @@ public class AnimeService {
             animeMap.put(String.valueOf(anime.getMal_id()), animeJsonString);
            
         }
-        animeRepo.setMapAll(genre, animeMap);
+        //cache the top genre for 24 hours. it is assumed that the top anime doesn't change frequently.
+        animeRepo.setMapAllWithTTL(genre, animeMap,24*3600);
         System.out.println("cache miss");
     
         return animeListByGenre;

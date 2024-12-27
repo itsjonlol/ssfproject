@@ -36,6 +36,8 @@ public class AnimeUtil {
         String synopsis = jObject.getString("synopsis", null);
         Integer year = (!jObject.isNull("year")) ? jObject.getInt("year") : null;
 
+        String trailer = jObject.getJsonObject("trailer").getString("embed_url",null);
+
         JsonArray producerArray = (!jObject.isNull("producers")) ? jObject.getJsonArray("producers") : null;
         JsonArray studioArray = (!jObject.isNull("studios")) ? jObject.getJsonArray("studios") : null;
         JsonArray genreArray = (!jObject.isNull("genres")) ? jObject.getJsonArray("genres") : null ;
@@ -79,6 +81,7 @@ public class AnimeUtil {
         anime.setProducers(producers);
         anime.setStudios(studios);
         anime.setGenres(genres);
+        anime.setTrailer(trailer);
 
         return anime;
 

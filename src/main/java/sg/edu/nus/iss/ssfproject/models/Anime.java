@@ -19,6 +19,8 @@ public class Anime {
     private List<String> producers;
     private List<String> studios;
     private List<String> genres;
+    private String trailer;
+
 
     public Anime() {
 
@@ -44,32 +46,16 @@ public class Anime {
     }
 
 
+    
 
 
-
-    public Anime(Integer mal_id, String large_image_url, String title, String title_japanese, String type,
-            Integer episodes, String status, String duration, Double score, Integer rank, String synopsis,
-            Integer year) {
-        this.mal_id = mal_id;
-        this.large_image_url = large_image_url;
-        this.title = title;
-        this.title_japanese = title_japanese;
-        this.type = type;
-        this.episodes = episodes;
-        this.status = status;
-        this.duration = duration;
-        this.score = score;
-        this.rank = rank;
-        this.synopsis = synopsis;
-        this.year = year;
-    }
 
 
 
 
     public Anime(Integer mal_id, String large_image_url, String title, String title_japanese, String type,
             Integer episodes, String status, String duration, Double score, Integer rank, String synopsis, Integer year,
-            List<String> producers, List<String> studios, List<String> genres) {
+            List<String> producers, List<String> studios, List<String> genres, String trailer) {
         this.mal_id = mal_id;
         this.large_image_url = large_image_url;
         this.title = title;
@@ -85,7 +71,10 @@ public class Anime {
         this.producers = producers;
         this.studios = studios;
         this.genres = genres;
+        this.trailer = trailer;
     }
+
+
 
 
 
@@ -214,6 +203,22 @@ public class Anime {
     public String toString() {
         return "Anime [mal_id=" + mal_id + ", title=" + title
                 + ", type=" + type + ", genres=" + genres + "]";
+    }
+
+
+
+
+
+    public String getTrailer() {
+        return trailer;
+    }
+
+
+
+
+
+    public void setTrailer(String trailer) {
+        this.trailer = trailer;
     }
     
     
