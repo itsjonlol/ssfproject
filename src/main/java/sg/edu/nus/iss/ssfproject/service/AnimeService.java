@@ -105,7 +105,7 @@ public class AnimeService {
         //cache hit to reduce load times. check to see if the genre exists in redis.
         animeListByGenre = this.getCachedAnimesByGenre(genre);
         if (!animeListByGenre.isEmpty()) {
-            System.out.println("cache hit");
+            System.out.println("cache hit for " + genre);
             return animeListByGenre;
         }
 
@@ -129,7 +129,7 @@ public class AnimeService {
         }
         //cache the top genre for 24 hours. it is assumed that the top anime doesn't change frequently.
         animeRepo.setMapAllWithTTL(genre, animeMap,24*3600);
-        System.out.println("cache miss");
+        System.out.println("cache miss for " + genre);
     
         return animeListByGenre;
     }
