@@ -107,7 +107,7 @@
         <div class="list-group list-group-flush ">
             <div class="list-group-item d-flex align-items-center custom-list-group border-0" th:each="anime : ${watchlist}">
                 <a th:href="@{'/' + ${anime.mal_id}}">
-                    <img th:src="${anime.large_image_url}" alt="Anime Image" class="me-2" style="width: 100px; height: auto;">
+                    <img th:src="${anime.large_image_url}" alt="Image" class="me-2" style="width: 100px; height: auto;">
                 </a>
                 <div class=" ms-2 me-auto"> 
                     <a th:href="@{'/' + ${anime.mal_id}}" th:text="${anime.title}" class="fw-bold text-decoration-none custom-list-group "></a>

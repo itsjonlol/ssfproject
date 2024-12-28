@@ -38,6 +38,10 @@ public class AnimeUtil {
 
         String trailer = jObject.getJsonObject("trailer").getString("embed_url",null);
 
+        if (trailer != null) {
+            trailer = trailer.replace("autoplay=1", "autoplay=0");
+        }
+
         JsonArray producerArray = (!jObject.isNull("producers")) ? jObject.getJsonArray("producers") : null;
         JsonArray studioArray = (!jObject.isNull("studios")) ? jObject.getJsonArray("studios") : null;
         JsonArray genreArray = (!jObject.isNull("genres")) ? jObject.getJsonArray("genres") : null ;
