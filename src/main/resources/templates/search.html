@@ -66,13 +66,13 @@
     <h1 class ="text-center m-4">Lookup your favourite anime</h1>
 
     <form class="d-flex pb-4 justify-content-center" th:action="@{/searchresult}" method="POST">
-        <input class="form-control me-2 w-50" type="search" name="query" placeholder="Search for an anime..." aria-label="Search">
+        <input class="form-control me-2 w-50" type="search" name="query" placeholder="Search for an anime... e.g. 'naruto' " aria-label="Search">
         <button class="btn custom-btn btn-outline-success" type="submit">Search</button>
     </form>
     <div th:if="${errorMessage}" th:text="${errorMessage}" class ="text-center"></div>
     
     <div th:if="${animelist == null}" class="text-center">
-        <p>No Anime searched yet...</p>
+        <p>No Anime searched yet... You may navigate through the anime cards with keyboard arrow keys once searched.</p>
     </div>
     <div th:if="${noresults}" class="text-center">
         <p>No Anime found...</p>
