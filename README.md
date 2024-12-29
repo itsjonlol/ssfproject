@@ -22,5 +22,7 @@ Credits:
 - https://wallpapers.com/wallpapers/purple-sky-anime-city-jfyl3kuulzsbh0oa.html
 
 Website link:
-- anime-finder.up.railway.app
+- https://anime-finder.up.railway.app
+
+
 
