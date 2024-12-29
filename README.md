@@ -22,5 +22,5 @@ Credits:
 - https://wallpapers.com/wallpapers/purple-sky-anime-city-jfyl3kuulzsbh0oa.html
 
 Website link:
-- https://humorous-integrity-production.up.railway.app
+- anime-finder.up.railway.app
 
