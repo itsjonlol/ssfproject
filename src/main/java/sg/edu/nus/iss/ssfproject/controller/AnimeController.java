@@ -72,13 +72,12 @@ public class AnimeController {
          //get list of approved genres to be displayed in front end.
         List<String> animeGenres = animeService.getAnimeGenresForFrontPage();
         model.addAttribute("animegenres",animeGenres);
-
-        
-        List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);
         //if genre doesnt exist
         if (!animeGenres.contains(genre)) {
             return "error";
         }
+        List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);
+        
          //for api error cases
         if (!animeListByGenre.isEmpty()) {
             if ( animeListByGenre.getFirst().getTitle().equals("apierror") ) {
