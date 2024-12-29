@@ -75,6 +75,10 @@ public class AnimeController {
 
         
         List<Anime> animeListByGenre = animeService.getAnimeListByGenre(genre);
+        //if genre doesnt exist
+        if (!animeGenres.contains(genre)) {
+            return "error";
+        }
          //for api error cases
         if (!animeListByGenre.isEmpty()) {
             if ( animeListByGenre.getFirst().getTitle().equals("apierror") ) {
@@ -102,11 +106,15 @@ public class AnimeController {
     @PostMapping("/searchresult")
     public String showAnime(@RequestParam String query,Model model,HttpSession session) {
         
+        User verifiedUser = (User) session.getAttribute("verifieduser");
+        model.addAttribute("verifieduser",verifiedUser);
+
         //to ensure doesnt start with special characters.
         if (!query.matches("^[a-zA-Z0-9].*")) {
             model.addAttribute("errorMessage","Invalid input. Please start with an alphanumeric character");
             return "search";
         }
+        
         //get search results
         List<Anime> animeListByQuery = animeService.getAnimeListByQuery(query);
         //for api error cases
@@ -121,8 +129,7 @@ public class AnimeController {
         }
        
         model.addAttribute("animelist",animeListByQuery);
-        User verifiedUser = (User) session.getAttribute("verifieduser");
-        model.addAttribute("verifieduser",verifiedUser);
+        
 
         return "search";
     }

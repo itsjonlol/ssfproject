@@ -72,7 +72,9 @@
     <div th:if="${errorMessage}" th:text="${errorMessage}" class ="text-center"></div>
     
     <div th:if="${animelist == null}" class="text-center">
-        <p>No Anime searched yet... You may navigate through the anime cards with keyboard arrow keys once searched.</p>
+        <p>No Anime searched yet...</p>
+
+        <p>You may navigate through the anime cards with keyboard arrow keys once searched.</p>
     </div>
     <div th:if="${noresults}" class="text-center">
         <p>No Anime found...</p>
